@@ -130,89 +130,45 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-一、关于对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">title: first blog</span><br><span class="line">date: 2020-11-15 16:32:2011</span><br><span class="line">tags:</span><br><span class="line">	- diyici</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h4 id="c-对象模型"><a href="#c-对象模型" class="headerlink" title="c++对象模型"></a>c++对象模型</h4><p>类的**==非static成员变量==<strong>在类之中，</strong>==static成员变量==<strong>和==**staic/非static成员函数</strong>==在类之外。</p>
-<p>虚函数会在对象存储一个<strong>虚函数表指针(vptr)**，该指针指向相关的</strong>虚函数表(vtbl)**，vptr的初始化、重置由类的构造、析构、赋值决定。每一个类的type_info由vtbl指出，存储在第一个表项中。</p>
-<h4 id="类的内存大小"><a href="#类的内存大小" class="headerlink" title="类的内存大小"></a>类的内存大小</h4><ul>
-<li>非static成员变量的大小总和</li>
-<li>内存对齐，4bytes的整数倍</li>
-<li>支持虚函数和虚继承的额外开销</li>
-</ul>
-<h4 id="多态中的指针"><a href="#多态中的指针" class="headerlink" title="多态中的指针"></a>多态中的指针</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZooAnimal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">dance</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> ioc;</span><br><span class="line">    String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bear</span> :</span> <span class="keyword">public</span> ZooAnimal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Dances</span> &#123;</span>...&#125;;</span><br><span class="line">    </span><br><span class="line">    Dances dances;</span><br><span class="line">    <span class="keyword">int</span> cell_block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如上的继承体系，Bear类的内存情况如下：</p>
-<img src="C:\Users\Cbxa\AppData\Roaming\Typora\typora-user-images\image-20201111102947075.png" alt="image-20201111102947075" style="zoom:60%;" />
-
-<p>指针只考虑解析时，根据指针的类型，读取对应大小的内存</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/15/%E4%B8%80%E3%80%81%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-first-blog" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-目标" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/15/first-blog/">first blog</a>
+      <a class="article-title" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">目标</a>
     </h1>
   
 
         
-        <a href="/2020/11/15/first-blog/" class="archive-article-date">
-  	<time datetime="2020-11-15T08:32:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-15</time>
+        <a href="/2020/11/16/%E7%9B%AE%E6%A0%87/" class="archive-article-date">
+  	<time datetime="2020-11-16T10:40:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-16</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h3 id="小目标"><a href="#小目标" class="headerlink" title="小目标"></a>小目标</h3><ul>
+<li>整明白c++<ul>
+<li>对象（c++对象模型）</li>
+<li>并发（并发编程实战）</li>
+<li>网络io（unix网络编程、linux高性能服务器）</li>
+<li>数据库</li>
+<li>linux（私房菜）</li>
+<li>stl（stl源码）</li>
+<li>有空看看template（c++ templates 第二版还没有中文）</li>
+</ul>
+</li>
+<li>要求<ul>
+<li>造个json的轮子</li>
+<li>做个http服务器</li>
+<li>实现几个stl，allocator</li>
+</ul>
+</li>
+</ul>
+
       
 
       
@@ -225,7 +181,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">diyici</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">该做的事</a>
         		</li>
       		
 		</ul>
@@ -235,7 +191,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/15/first-blog/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">展开全文 >></a>
         </p>
       
 
@@ -350,7 +306,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">diyici</a>
+                <a href="javascript:void(0)" class="js-tag color5">该做的事</a>
               </li>
             
             <div class="clearfix"></div>
