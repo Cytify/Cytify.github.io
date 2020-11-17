@@ -6,27 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>c++对象模型--第四章-函数 | Cytify</title>
+  <title>cpp-对象模型-第四章-函数 | Cytify</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="成员函数的调用非静态成员函数(Nonstaic Member Function)成员函数会经过编译器转换为非成员函数：  改变函数的声明，新增一个额外参数，用于访问类内的数据和函数。 123456class Point3d;&#x2F;&#x2F; non-constPoint3d Point3d::Magnitude(); -&gt; Point3d Point3d::Magnitude(Point3d *cons">
 <meta property="og:type" content="article">
-<meta property="og:title" content="c++对象模型--第四章-函数">
-<meta property="og:url" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:title" content="cpp-对象模型-第四章-函数">
+<meta property="og:url" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Cytify">
 <meta property="og:description" content="成员函数的调用非静态成员函数(Nonstaic Member Function)成员函数会经过编译器转换为非成员函数：  改变函数的声明，新增一个额外参数，用于访问类内的数据和函数。 123456class Point3d;&#x2F;&#x2F; non-constPoint3d Point3d::Magnitude(); -&gt; Point3d Point3d::Magnitude(Point3d *cons">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117093220735.png">
-<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117100521963.png">
-<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117102619630.png">
-<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117103113863.png">
-<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117110854558.png">
-<meta property="article:published_time" content="2020-11-17T06:21:11.000Z">
-<meta property="article:modified_time" content="2020-11-17T06:26:15.260Z">
+<meta property="og:image" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117093220735.png">
+<meta property="og:image" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117100521963.png">
+<meta property="og:image" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117102619630.png">
+<meta property="og:image" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117103113863.png">
+<meta property="og:image" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117110854558.png">
+<meta property="article:published_time" content="2020-11-17T06:42:00.000Z">
+<meta property="article:modified_time" content="2020-11-17T06:44:21.393Z">
 <meta property="article:author" content="Cytify">
 <meta property="article:tag" content="c++">
 <meta property="article:tag" content="c++对象模型">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117093220735.png">
+<meta name="twitter:image" content="http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117093220735.png">
   
     <link rel="alternative" href="/atom.xml" title="Cytify" type="application/atom+xml">
   
@@ -140,20 +140,20 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-c-对象模型-第四章-函数" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-cpp-对象模型-第四章-函数" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      c++对象模型--第四章-函数
+      cpp-对象模型-第四章-函数
     </h1>
   
 
         
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:21:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
+        <a href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" class="archive-article-date">
+  	<time datetime="2020-11-17T06:42:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
 </a>
         
       </header>
@@ -244,7 +244,7 @@
 <p>如：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Point();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> POint&amp; <span class="title">Mult</span><span class="params">(<span class="keyword">float</span>)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">y</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">z</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> x_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point2d</span> :</span> <span class="keyword">public</span> Point &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Point2d();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> POint2d&amp; <span class="title">Mult</span><span class="params">(<span class="keyword">float</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">y</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> y_; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> y_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span> :</span> <span class="keyword">public</span> Point2d &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Point3d();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> POint3d&amp; <span class="title">Mult</span><span class="params">(<span class="keyword">float</span>)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">z</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> z_; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> z_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<img src="images\image-20201117093220735.png" alt="image-20201117093220735" style="zoom:80%;" />
+<img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117093220735.png" alt="image-20201117093220735" style="zoom:80%;">
 
 <p>因此，<code>ptr-&gt;z();</code>会被转换为<code>(ptr-&gt;_vptr[4])(ptr)</code></p>
 <p>这一转换在编译器即可完成，但在执行期才能知道调用的是哪一个类的<code>z()</code></p>
@@ -266,7 +266,7 @@
 <li>一个<strong>主要实例</strong>，子类的虚函数表，与最左端的Base1类<strong>共享</strong>，涵盖整个对象的虚函数</li>
 <li>一个<strong>次要实例</strong>，与Base2类相关，不包含Base1，即左边的父类的相关虚函数</li>
 </ul>
-<img src="images\image-20201117100521963.png" alt="image-20201117100521963" style="zoom:80%;" />
+<img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117100521963.png" alt="image-20201117100521963" style="zoom:80%;">
 
 <p>例如：<code>Base *pb1 = new Derived; Base2 *pb2 = pb1-&gt;Clone();</code></p>
 <p>pb1首先加上offset，调整到Derived类地址，调用<code>Derived::Clone()</code>，返回值需要减去offset，调整到Base2的地址。</p>
@@ -277,11 +277,11 @@
 <p><strong>Microsoft</strong>使用<strong>address points</strong>的方法。</p>
 <h4 id="虚拟继承"><a href="#虚拟继承" class="headerlink" title="虚拟继承"></a>虚拟继承</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point2d</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Point2d(<span class="keyword">float</span> = <span class="number">0.0</span>, <span class="keyword">float</span> =<span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">virtual</span> ~Point2d();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Mumble</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">Z</span><span class="params">()</span>:</span></span><br><span class="line"><span class="function"><span class="keyword">private</span>:</span></span><br><span class="line">	float x_, y_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> Point2d &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Point3d(<span class="keyword">float</span> = <span class="number">0.0</span>, <span class="keyword">float</span> = <span class="number">0.0</span>, <span class="keyword">float</span> = <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">virtual</span> ~Point3d();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">Z</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> z_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<img src="images\image-20201117102619630.png" alt="image-20201117102619630" style="zoom:80%;" />
+<img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117102619630.png" alt="image-20201117102619630" style="zoom:80%;">
 
 <p>不同编译器对于虚继承下的虚函数有着眼花缭乱的支持，这里不做详述，太怪异了。</p>
 <p>但是谨记，<strong>不要在虚基类中声明非静态数据成员</strong>。</p>
-<h3 id="函数的效率"><a href="#函数的效率" class="headerlink" title="函数的效率"></a>函数的效率</h3><img src="images\image-20201117103113863.png" alt="image-20201117103113863" style="zoom:80%;" />
+<h3 id="函数的效率"><a href="#函数的效率" class="headerlink" title="函数的效率"></a>函数的效率</h3><img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117103113863.png" alt="image-20201117103113863" style="zoom:80%;">
 
 <p><strong>友元函数、静态成员函数、非静态成员函数</strong>的效率差不多，这是易于理解的，因为三者最终的调用方式相同，都被<strong>转换为非成员函数</strong>。</p>
 <p><strong>单继承虚函数</strong>需要通过构造函数设定vptr，所以效率降低了。</p>
@@ -309,7 +309,7 @@
 <p>但是这样每次通过成员函数指针调用都会判断一次。被人诟病。</p>
 <p><strong>Microsoft</strong>引入<strong>vcall thunk</strong>，因此，<strong>faddr</strong>要么指向函数地址、要么指向<strong>vcall thunk</strong>地址，<strong>vcall thunk</strong>会自动选定虚函数表中的下标，调用。</p>
 <p>该结构体的一个副作用是，当传递一个固定值给成员函数时，可能会产生临时对象。</p>
-<h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><img src="images\image-20201117110854558.png" alt="image-20201117110854558" style="zoom:80%;" />
+<h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/image-20201117110854558.png" alt="image-20201117110854558" style="zoom:80%;">
 
 <h3 id="内联函数-Inline-Function"><a href="#内联函数-Inline-Function" class="headerlink" title="内联函数(Inline Function)"></a>内联函数(Inline Function)</h3><p><strong>inline只是个请求</strong>，是否被接受，还得看编译器的是否认可inline的做法。</p>
 <p>在<strong>cfront</strong>中，有一套测试法，两个阶段：</p>
@@ -405,7 +405,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -420,8 +420,8 @@
 <nav id="article-nav">
   
   
-    <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">c++对象模型--第三章-数据</div>
+    <a href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">cpp-对象模型-第三章-数据</div>
       <i class="icon-circle-right"></i>
     </a>
   

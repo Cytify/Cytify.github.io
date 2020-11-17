@@ -130,20 +130,20 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-c-对象模型-第四章-函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-cpp-对象模型-第四章-函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">c++对象模型--第四章-函数</a>
+      <a class="article-title" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">cpp-对象模型-第四章-函数</a>
     </h1>
   
 
         
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:21:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
+        <a href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" class="archive-article-date">
+  	<time datetime="2020-11-17T06:42:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
 </a>
         
       </header>
@@ -167,7 +167,7 @@
 <p>假设有如下代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point3d <span class="title">Point3d::Normalize</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = Magnitude();</span><br><span class="line">    <span class="keyword">return</span> Point3d( x_/msg, y_/msg, z_/msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 经过转换，以及NRV优化</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Normalize_7Point3dFv</span><span class="params">(<span class="keyword">register</span> <span class="keyword">const</span> Point3d* <span class="keyword">const</span> <span class="keyword">this</span>, Point3d&amp; _result)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = <span class="keyword">this</span>-&gt;Magnitude();</span><br><span class="line">    _result.Point3d::Point3d(<span class="keyword">this</span>-&gt;x_/msg, <span class="keyword">this</span>-&gt;y_/msg, <span class="keyword">this</span>-&gt;z_/msg);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/#more">more >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/#more">more >></a>
         
       
 
@@ -195,7 +195,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">展开全文 >></a>
         </p>
       
 
@@ -225,20 +225,20 @@
 
 
   
-    <article id="post-c-对象模型-第三章-数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-cpp-对象模型-第三章-数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">c++对象模型--第三章-数据</a>
+      <a class="article-title" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">cpp-对象模型-第三章-数据</a>
     </h1>
   
 
         
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
+        <a href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" class="archive-article-date">
+  	<time datetime="2020-11-17T06:38:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
 </a>
         
       </header>
@@ -268,7 +268,7 @@
 <p>为了使的读取更有效率，会将内存扩大到4的倍数。</p>
 </li>
 </ul>
-<img src="images\image-20201113112204067.png" alt="image-20201113112204067" style="zoom:67%;" />
+<img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/image-20201113112204067.png" alt="image-20201113112204067" style="zoom:67%;">
 
 <p><strong>A的12bytes</strong></p>
 <p><strong>一个虚基类只会在子类中存在一份实例</strong></p>
@@ -289,7 +289,7 @@
 </li>
 </ul>
         
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/#more">more >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/#more">more >></a>
         
       
 
@@ -317,7 +317,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">展开全文 >></a>
         </p>
       
 
@@ -347,20 +347,20 @@
 
 
   
-    <article id="post-c-对象模型-第二章-构造函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-cpp-对象模型-第二章-构造函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">c++对象模型--第二章-构造函数</a>
+      <a class="article-title" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">cpp-对象模型-第二章-构造函数</a>
     </h1>
   
 
         
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:01:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
+        <a href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="archive-article-date">
+  	<time datetime="2020-11-17T06:36:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
 </a>
         
       </header>
@@ -376,7 +376,7 @@
 
 <p>此时编译器为了满足自身要求，会创建要给构造函数，大体如下：</p>
         
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/#more">more >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/#more">more >></a>
         
       
 
@@ -404,7 +404,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">展开全文 >></a>
         </p>
       
 
@@ -434,20 +434,20 @@
 
 
   
-    <article id="post-c-对象模型-第一章-关于对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-cpp-对象模型-第一章-关于对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">c++对象模型--第一章-关于对象</a>
+      <a class="article-title" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">cpp-对象模型-第一章-关于对象</a>
     </h1>
   
 
         
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/" class="archive-article-date">
-  	<time datetime="2020-11-17T05:57:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
+        <a href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/" class="archive-article-date">
+  	<time datetime="2020-11-17T06:34:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
 </a>
         
       </header>
@@ -464,7 +464,7 @@
 <h4 id="多态中的指针"><a href="#多态中的指针" class="headerlink" title="多态中的指针"></a>多态中的指针</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZooAnimal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">dance</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> ioc;</span><br><span class="line">    String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bear</span> :</span> <span class="keyword">public</span> ZooAnimal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Dances</span> &#123;</span>...&#125;;</span><br><span class="line">    </span><br><span class="line">    Dances dances;</span><br><span class="line">    <span class="keyword">int</span> cell_block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>如上的继承体系，Bear类的内存情况如下：</p>
-<img src="images\image-20201111102947075.png" alt="image-20201111102947075" style="zoom:60%;" />
+<img src="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/image-20201111102947075.png" alt="image-20201111102947075" style="zoom:60%;">
 
 <p>解析时，指针根据指针的类型，读取对应大小的内存</p>
 
@@ -494,7 +494,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
+          <a class="article-more-a" href="/2020/11/17/cpp-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
         </p>
       
 
