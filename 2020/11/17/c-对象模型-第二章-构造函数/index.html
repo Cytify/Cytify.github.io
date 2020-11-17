@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Cytify</title>
+  <title>c++对象模型--第二章-构造函数 | Cytify</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Cytify">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="默认构造函数的生成并不是类没有构造函数时，编译器都会创建一个默认构造函数，只有当编译器需要的时候，才会创建一个默认构造函数。 而如果是程序的需要，那就是程序员的责任去创建构造函数。 c++95声明，当没有用户定义的构造函数时，会隐式创建一个默认构造函数，然而这个隐式构造函数是trivial的(无能的) 带有默认构造函数的成员类对象如果类没有构造函数，但是其成员类对象拥有默认构造函数，那么该类的隐式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++对象模型--第二章-构造函数">
+<meta property="og:url" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Cytify">
+<meta property="og:description" content="默认构造函数的生成并不是类没有构造函数时，编译器都会创建一个默认构造函数，只有当编译器需要的时候，才会创建一个默认构造函数。 而如果是程序的需要，那就是程序员的责任去创建构造函数。 c++95声明，当没有用户定义的构造函数时，会隐式创建一个默认构造函数，然而这个隐式构造函数是trivial的(无能的) 带有默认构造函数的成员类对象如果类没有构造函数，但是其成员类对象拥有默认构造函数，那么该类的隐式">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/images/image-20201112151401484.png">
+<meta property="article:published_time" content="2020-11-17T06:01:52.000Z">
+<meta property="article:modified_time" content="2020-11-17T06:25:45.623Z">
 <meta property="article:author" content="Cytify">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="c++对象模型">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/images/image-20201112151401484.png">
   
     <link rel="alternative" href="/atom.xml" title="Cytify" type="application/atom+xml">
   
@@ -128,233 +136,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-c-对象模型-第四章-函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-c-对象模型-第二章-构造函数" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">c++对象模型--第四章-函数</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:21:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="成员函数的调用"><a href="#成员函数的调用" class="headerlink" title="成员函数的调用"></a>成员函数的调用</h3><h4 id="非静态成员函数-Nonstaic-Member-Function"><a href="#非静态成员函数-Nonstaic-Member-Function" class="headerlink" title="非静态成员函数(Nonstaic Member Function)"></a>非静态成员函数(Nonstaic Member Function)</h4><p><strong>成员函数</strong>会经过编译器转换为<strong>非成员函数</strong>：</p>
-<ul>
-<li><p>改变函数的声明，新增一个额外参数，用于访问类内的数据和函数。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span>;</span></span><br><span class="line"><span class="comment">// non-const</span></span><br><span class="line"><span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">()</span></span>; -&gt; <span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">(Point3d *<span class="keyword">const</span> <span class="keyword">this</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// const</span></span><br><span class="line"><span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">()</span> <span class="keyword">const</span></span>; -&gt; <span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">(<span class="keyword">const</span> Point3d *<span class="keyword">const</span> <span class="keyword">this</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对成员的访问操作变为<strong>this指针</strong>的访问</p>
-</li>
-<li><p>转换函数名称——<strong>mangling方法</strong>(第三章数据部分提到，用于转换static变量名)</p>
-</li>
-<li><p>转换后，函数的调用也需要被转换</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span>;</span></span><br><span class="line">Point3d obj;</span><br><span class="line">Point3d *ptr = <span class="keyword">new</span> Point3d;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设Magnitude名称转换为Magnitude_7Point3dFv</span></span><br><span class="line">obj.Magnitude(); -&gt; Magnitude_7Point3dFv(&amp;obj);</span><br><span class="line">ptr-&gt;Magnitude(); -&gt; Magnitude_7Point3dFv(ptr);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>假设有如下代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point3d <span class="title">Point3d::Normalize</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = Magnitude();</span><br><span class="line">    <span class="keyword">return</span> Point3d( x_/msg, y_/msg, z_/msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 经过转换，以及NRV优化</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Normalize_7Point3dFv</span><span class="params">(<span class="keyword">register</span> <span class="keyword">const</span> Point3d* <span class="keyword">const</span> <span class="keyword">this</span>, Point3d&amp; _result)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = <span class="keyword">this</span>-&gt;Magnitude();</span><br><span class="line">    _result.Point3d::Point3d(<span class="keyword">this</span>-&gt;x_/msg, <span class="keyword">this</span>-&gt;y_/msg, <span class="keyword">this</span>-&gt;z_/msg);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第三章-数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">c++对象模型--第三章-数据</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="类的大小"><a href="#类的大小" class="headerlink" title="类的大小"></a>类的大小</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Y</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Z</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> ;</span> <span class="keyword">public</span> Y, <span class="keyword">public</span> Z &#123;&#125;:</span><br></pre></td></tr></table></figure>
-
-<p>以上的继承体系中，类的大小会根据编译器的处理而变化。</p>
-<ul>
-<li><p>X为1bytes，Y，Z为8bytes，A为12bytes</p>
-<p><strong>X为1bytes</strong></p>
-<p>编译器为了确保<strong>类的不同对象具有不同地址</strong>，会为空类内部安插一个char。</p>
-<p><strong>Y，Z为8bytes</strong></p>
-<p>首先，我们需要知道，Y，Z的大小收到三部分影响：</p>
-<ul>
-<li><p><strong>语言本身的负担</strong></p>
-<p>虚基类、虚函数都会是类内部扩张，具体显示在某种形式的指针(或offset)上。</p>
-<p>虚基类的指针会指向虚基类或相关表格或具体偏移量。</p>
-<p>虚函数的指针则是指向虚函数表。</p>
-</li>
-<li><p><strong>编译器对特殊情况的优化</strong></p>
-<p>Y，Z是空类，因此需要一个char，被放在类的固定部分的尾部。</p>
-<p>某些编译器会对空虚基类进行特殊支持。</p>
-</li>
-<li><p><strong>内存地址对齐</strong></p>
-<p>为了使的读取更有效率，会将内存扩大到4的倍数。</p>
-</li>
-</ul>
-<img src="images\image-20201113112204067.png" alt="image-20201113112204067" style="zoom:67%;" />
-
-<p><strong>A的12bytes</strong></p>
-<p><strong>一个虚基类只会在子类中存在一份实例</strong></p>
-<p>因此，A的大小如下：</p>
-<ul>
-<li>唯一一份X的实例，1bytes</li>
-<li>父类Y的大小，减去虚基类的就开销，结果使4bytes，X同理</li>
-<li>A自己的大小，0</li>
-<li>对齐，前三项为9bytes，因此最终是12bytes</li>
-</ul>
-</li>
-<li><p>X为1bytes，Y，Z为4bytes，A为8bytes</p>
-<p><strong>Y，Z为4bytes</strong></p>
-<p>有些编译器对空虚基类优化，将其放到子类的最初部分，这样子类就有了member，也就不会有第二点1个char的填充，也不需要对齐，因此只需4bytes。</p>
-<p><strong>A为8bytes</strong></p>
-<p>有些编译器对空虚基类优化，X实例的1bytes可以省略，因此也没有对齐，所以使8bytes</p>
-<p>注意：编译器的的优化仅仅针对<strong>空虚基类</strong></p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第二章-构造函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">c++对象模型--第二章-构造函数</a>
+    <h1 class="article-title" itemprop="name">
+      c++对象模型--第二章-构造函数
     </h1>
   
 
@@ -375,9 +164,214 @@
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo foo;</span><br><span class="line">    <span class="keyword">char</span>* str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>此时编译器为了满足自身要求，会创建要给构造函数，大体如下：</p>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/#more">more >></a>
-        
+<a id="more"></a>
+
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="title">Bar::Bar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    foo.Foo::Foo();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>但是该构造函数并没有初始化<strong>str</strong>，这将导致程序运行不正确，然而这一部分功能应该由程序员去实现</p>
+<p>假设程序员编写了如下构造函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Bar::Bar() &#123;</span><br><span class="line">	str = <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然而该构造函数没有满足编译器的需求，因此，编译器会<strong>扩张</strong>该构造函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Bar::Bar() &#123;</span><br><span class="line">    foo.Foo::Foo();</span><br><span class="line">    str = <span class="literal">nullptr</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果类由多个成员类对象，则会根据其声明顺序，来扩张构造函数的编写顺序。</p>
+<h4 id="带有默认构造函数的父类"><a href="#带有默认构造函数的父类" class="headerlink" title="带有默认构造函数的父类"></a>带有默认构造函数的父类</h4><p>这种情况下与前一种情况类似。</p>
+<p>如果本类由多个构造函数，但是没有默认构造函数，编译器会扩张每一个构造函数，而不会去创建一个新的默认构造函数。</p>
+<p>如果本类中还有带着默认构造函数的成员类对象，这些成员类的默认构造函数也会在父类默认构造函数调用之后被调用。</p>
+<h4 id="带有虚函数的类"><a href="#带有虚函数的类" class="headerlink" title="带有虚函数的类"></a>带有虚函数的类</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Widget</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Flip</span><span class="params">()</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Flip</span><span class="params">(<span class="keyword">const</span> Widget&amp; widget)</span> </span>&#123;</span><br><span class="line">    widget.Flip();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Bell 和 Whistle 都继承Widget类</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	Bell b;</span><br><span class="line">    Whistle w;</span><br><span class="line">    </span><br><span class="line">    Flip(b);</span><br><span class="line">    Flip(w);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中，虚函数的调用部分会被重写成类似形式：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// widget.Flip() 的虚函数调用动作</span></span><br><span class="line">(*widget.vptr[<span class="number">1</span>])(&amp;widget)</span><br><span class="line"></span><br><span class="line"><span class="comment">// &amp;widget 表示被调用的函数实例的this指针</span></span><br></pre></td></tr></table></figure>
+
+<p>为了实现如上调用，编译器会为每一个带有虚函数的类的vptr初始化。</p>
+<h4 id="带有虚基类的类"><a href="#带有虚基类的类" class="headerlink" title="带有虚基类的类"></a>带有虚基类的类</h4><p>虚基类在不同编译器上的实现方式不同，而每一种实现方式都需要确保<strong>虚基类在子类中的位置能在执行期确定</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span> </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">double</span> d;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">C</span> :</span> <span class="keyword">public</span> A, <span class="keyword">public</span> B &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> k;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">(<span class="keyword">const</span> A* pa)</span> </span>&#123;</span><br><span class="line">    pa-&gt;i = <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Foo(<span class="keyword">new</span> A);</span><br><span class="line">    Foo(<span class="keyword">new</span> B);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上述代码中，编译器无法<strong>确定pa中的X::i的具体位置</strong>，因为A*的实际类型并不清楚。</p>
+<p>因此编译器需要改变代码，在执行期确定<code>X::i</code>。</p>
+<p>可能的改变如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">(<span class="keyword">const</span> A* pa)</span> </span>&#123;</span><br><span class="line">    pa-&gt;_vbcX-&gt;i = <span class="number">1024</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>同个一个<strong>_vbcX</strong>指向具体的虚基类X，编译器也为此在对象创建时初始化该指针。</p>
+<h3 id="复制构造函数的操作"><a href="#复制构造函数的操作" class="headerlink" title="复制构造函数的操作"></a>复制构造函数的操作</h3><h4 id="复制构造函数的调用"><a href="#复制构造函数的调用" class="headerlink" title="复制构造函数的调用"></a>复制构造函数的调用</h4><p>在三种情况中，复制构造函数会被调用：</p>
+<ul>
+<li><p>显式地将对象作为另一个对象的初值</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line">X a;</span><br><span class="line">X ax = a;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对象通过参数传递给函数</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">(X x)</span></span>;</span><br><span class="line">Foo(x);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数返回类对象</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    <span class="keyword">return</span> xx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h4 id="默认按成员初始化-default-memeberwise-initialization"><a href="#默认按成员初始化-default-memeberwise-initialization" class="headerlink" title="默认按成员初始化(default memeberwise initialization)"></a>默认按成员初始化(default memeberwise initialization)</h4><p>如果类没有显式复制构造函数，编译器会以<strong>默认按成员初始化</strong>，即将类中声明的，或继承的数据成员逐一复制，如果遇到了成员类对象，将会递归地实行按成员初始化。如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// 缺少显式复制构造函数</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* str;</span><br><span class="line">    <span class="keyword">int</span> len;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">String <span class="title">noun</span><span class="params">(<span class="string">&quot;book&quot;</span>)</span></span>;</span><br><span class="line">String verb = noun;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 类似于</span></span><br><span class="line">verb.str = noun.str;</span><br><span class="line">verb.len = noun.len;</span><br></pre></td></tr></table></figure>
+
+<p>此时该对象的默认按成员初始化会发生。</p>
+<p>如果该类是另一个类的成员，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Word</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="comment">// 缺少显式复制构造函数</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> occurs;</span><br><span class="line">    String word;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>那么word的复制构造函数会以默认按成员初始化的方式进行，先复制occurs，接着在递归调用word的按成员初始化操作。</p>
+<p>这种默认按成员初始化的操作时怎么实现的？</p>
+<p>如同默认构造函数，默认复制构造函数的生成会区分为<strong>trivial</strong>和<strong>nontrivial</strong>，只有<strong>nontrivial</strong>的实例会被创建。</p>
+<p>而复制构造函数的trivial的标转在于类是否展现出<strong>bitwise copy semantics</strong>。</p>
+<p>####bitwise copy semantics（按位逐个复制）</p>
+<p>如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Word</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> cnt;</span><br><span class="line">    <span class="keyword">char</span>* str;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>以上情况就展现出了<strong>bitwise copy semantics</strong>，也无需由一个默认复制构造函数来完成初始化操作，通过直接赋值即可完成，默认复制构造函数也不会创建。</p>
+<p>然而：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Word</span>&#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> cnt;</span><br><span class="line">    String str;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">String</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    String(<span class="keyword">const</span> String&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这种情况下，编译器需要创建默认复制构造函数，调用str的复制构造函数。</p>
+<p><strong>编译器合成的复制构造函数都是浅复制</strong></p>
+<h4 id="没有展现出bitwise-copy-semantics"><a href="#没有展现出bitwise-copy-semantics" class="headerlink" title="没有展现出bitwise copy semantics"></a>没有展现出bitwise copy semantics</h4><p>以下四种情况，类不会展现出bitwise copy semantics</p>
+<ul>
+<li>类中存在<strong>成员类对象</strong>，该成员类对象含有一个复制构造函数（不论是程序员显式声明的，还是编译器合成的）</li>
+<li>类继承<strong>带有复制构造函数的父类</strong>（不论是程序员显式声明的，还是编译器合成的）</li>
+<li>类具有<strong>虚函数</strong></li>
+<li>类的继承链中，<strong>存在虚继承</strong></li>
+</ul>
+<h4 id="具有虚函数的复制构造函数"><a href="#具有虚函数的复制构造函数" class="headerlink" title="具有虚函数的复制构造函数"></a>具有虚函数的复制构造函数</h4><p>有如下两类：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZooAnimal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    ZooAnimal();</span><br><span class="line">    ~ZooAnimal();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Animate</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Draw</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bear</span> :</span> <span class="keyword">public</span> ZooAnimal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Bear();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Animate</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">Draw</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Dance</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>当ZooAnimal的一个类对象以另一个ZooAnimal的对象作为初值，或Bear的一个类对象以另一个Bear的对象作为初值，都可以直接按位逐个复制完成，此时vptr也会同时复制过去。</p>
+<img src="images\image-20201112151401484.png" alt="image-20201112151401484" style="zoom:67%;" />
+
+<p>当<code>ZooAnimal</code>的一个类对象以<code>Bear</code>的对象作为初值时，就不能将vptr复制过去，复制构造函数会设定vptr指向<code>ZooAnimal</code>的而不是<code>Bear</code>的。</p>
+<h4 id="虚基类的复制构造函数"><a href="#虚基类的复制构造函数" class="headerlink" title="虚基类的复制构造函数"></a>虚基类的复制构造函数</h4><p>首先，同类对象的复制直接使用按位复制即可，然而，以子类的形式复制会存在问题，如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZooAnimal</span> &#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Raccon</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> ZooAnimal &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedPanda</span> :</span> <span class="keyword">public</span> Raccon &#123;&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>如果将RedPanda的对象复制给Raccon，编译器需要设置<strong>虚基类的指针或者偏移量</strong>。</p>
+<h3 id="程序转换"><a href="#程序转换" class="headerlink" title="程序转换"></a>程序转换</h3><p>例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">X <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    <span class="keyword">return</span> xx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在上述函数中会发生以下情况：</p>
+<ul>
+<li>每次Foo()被调用时，都会传回xx的值</li>
+<li>如果X定义了复制构造函数，return时也会调用复制构造函数</li>
+</ul>
+<p>第一种情况的真实性，需要明确X是如何定义的。</p>
+<p>第二种情况的真实性，虽然也需要明确X是如何定义，但是主要的还是看编译器是如何优化的。</p>
+<p>在不同的编译器上，优化的结果可能导致以上两种情况都不会发生。</p>
+<h4 id="显式的初始化"><a href="#显式的初始化" class="headerlink" title="显式的初始化"></a>显式的初始化</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line">X x0;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">X <span class="title">x1</span><span class="params">(x0)</span></span>;</span><br><span class="line">    X x2 = x0;</span><br><span class="line">    X x3 = X(x0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在程序优化过程中，会有两个阶段的动作：</p>
+<ul>
+<li>重写每一个定义，初始化操作会被重写。注：严谨的说，定义是指占用内存的行为。</li>
+<li>类的复制构造函数被调用</li>
+</ul>
+<p>因此，上述转换后可能是这样：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 定义被重写</span></span><br><span class="line">    X x1;</span><br><span class="line">	X x2;</span><br><span class="line">    X x3;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 调用复制构造函数</span></span><br><span class="line">    x1.X::X(x0);</span><br><span class="line">    x2.X::X(x0);</span><br><span class="line">    x3.X::X(x0);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="参数传递的初始化"><a href="#参数传递的初始化" class="headerlink" title="参数传递的初始化"></a>参数传递的初始化</h4><p>c++标准指出，将类对象作为参数或返回值时，相当于如下初始化：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X xx = arg;</span><br><span class="line"><span class="comment">// xx表示形式参数或返回值，arg表示实参</span></span><br></pre></td></tr></table></figure>
+
+<p>如果有如下定义：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">(X x0)</span></span>;</span><br><span class="line"></span><br><span class="line">X x;</span><br><span class="line">Foo(X x0);</span><br></pre></td></tr></table></figure>
+
+<p>这种情况下，不同编译器的实现方式不同，大体有两种：</p>
+<ul>
+<li><p>引入临时变量，调用复制构造函数将其初始化，但因此函数的声明也需要被改写。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">X _temp;</span><br><span class="line">_temp.X::X(x);</span><br><span class="line">Foo(_temp);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Foo函数也需要被改写</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">(X&amp; x0)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>在函数执行完毕后，临时变量也会自动调用析构函数。</p>
+</li>
+<li><p>拷贝建构(copy construct)</p>
+<p>将实参复制到合适的位置上，位置由函数调用的地址而决定，类似于==<strong>栈帧</strong>==</p>
+</li>
+</ul>
+<h4 id="返回值的初始化"><a href="#返回值的初始化" class="headerlink" title="返回值的初始化"></a>返回值的初始化</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">X <span class="title">Bar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    reutrn xx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>返回值的处理也是一个<strong>双阶段转换</strong></p>
+<ul>
+<li>增加一个额外参数，该参数是类的<strong>引用</strong>，用来放复制构造产生的返回值</li>
+<li>在return之前增加一个复制构造函数的调用操作，初始化这个额外参数</li>
+</ul>
+<p>转换后的Bar()函数如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bar</span><span class="params">(X&amp; _result)</span></span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    xx.X::X();</span><br><span class="line">    </span><br><span class="line">    _result.X::X(xx);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在调用Bar函数时，调用也需要转换</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">X xx = Bar();</span><br><span class="line"><span class="comment">//转换为</span></span><br><span class="line">X xx;</span><br><span class="line">Bar(xx);</span><br><span class="line"></span><br><span class="line">Bar().Fun();</span><br><span class="line"><span class="comment">// 转换为</span></span><br><span class="line">X _temp;</span><br><span class="line">(Bar(_temp), _temp).Fun();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数指针</span></span><br><span class="line">X (*pf)();</span><br><span class="line">pf = Bar;</span><br><span class="line"><span class="comment">// 转换为</span></span><br><span class="line"><span class="keyword">void</span> (*pf)(X&amp;);</span><br><span class="line">pf = Bar;</span><br></pre></td></tr></table></figure>
+
+<h4 id="在用户层上去优化返回值"><a href="#在用户层上去优化返回值" class="headerlink" title="在用户层上去优化返回值"></a>在用户层上去优化返回值</h4><p>定义一个计算用的构造函数，即不需要写</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">X <span class="title">Bar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    <span class="comment">// 处理xx</span></span><br><span class="line">    reutrn xx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">X <span class="title">Bar</span><span class="params">(<span class="keyword">const</span> T&amp; y, <span class="keyword">const</span> T&amp; z)</span> </span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    <span class="comment">// 以y和z来处理xx</span></span><br><span class="line">    <span class="keyword">return</span> xx;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样会导致xx使用复制构造函数，复制到编译器产生_result</p>
+<p>优化方法是定义一个X的构造函数，以y，z为初始化条件，因此Bar可以被改写为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">X <span class="title">Bar</span><span class="params">(<span class="keyword">const</span> T&amp; y, <span class="keyword">const</span> T&amp; z)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> X(y, z);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，被转换之后，效率可以会高一点</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bar</span><span class="params">(X&amp; _result, <span class="keyword">const</span> T&amp; y, <span class="keyword">const</span> T&amp; z)</span> </span>&#123;</span><br><span class="line">    _result.X::X(y, z);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样做减少了复制构造函数的成本。但是会导致类中的用于这种方法计算的构造函数数量增加。</p>
+<h4 id="在编译器层上去优化返回值"><a href="#在编译器层上去优化返回值" class="headerlink" title="在编译器层上去优化返回值"></a>在编译器层上去优化返回值</h4><p>编译器的优化即为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">X <span class="title">Bar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    X xx;</span><br><span class="line">    <span class="comment">// 处理xx</span></span><br><span class="line">    reutrn xx;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Bar</span><span class="params">(X&amp; _result)</span></span>&#123;</span><br><span class="line">    _result.X::X(xx);</span><br><span class="line">    <span class="comment">// 处理_result</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样的编译器优化操作，称为**Named Return Value(RNV)**优化。且NRV也是当今c++标准编译器的优化之一。</p>
+<p>虽然NRV的优化很好，但是饱受批评。原因有：</p>
+<ul>
+<li><p>NRV由编译器完成，他是否真的被执行，并不清楚</p>
+</li>
+<li><p>如果函数复杂，NRV就难以实行。</p>
+</li>
+<li><p>在有些程序中，NRV可能会导致程序错误运行</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Foo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 一个复制构造函数被调用</span></span><br><span class="line">    X xx = Bar();</span><br><span class="line">    <span class="comment">// 调用析构函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>此时对称性因为优化被打乱，程序的运行也出错了。</p>
+</li>
+</ul>
+<h3 id="复制构造函数，需要吗？"><a href="#复制构造函数，需要吗？" class="headerlink" title="复制构造函数，需要吗？"></a>复制构造函数，需要吗？</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Point(<span class="keyword">float</span> x, <span class="keyword">float</span> y, <span class="keyword">float</span> z);</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> x, y, z;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>类设计者需要编写复制构造函数吗？</p>
+<p>答案是<strong>不需要</strong>！</p>
+<p>首先，类中只有数值类型，编译器提供的复制构造函数<strong>足够</strong>了，安全，快速。</p>
+<p>然而，如果存在大量以按值返回对象的操作，为了保证NRV的施行，需要编写复制构造函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Point3d <span class="keyword">operator</span>+(<span class="keyword">const</span> Point3d&amp;, <span class="keyword">const</span> Point3d&amp;);</span><br><span class="line">Point3d <span class="keyword">operator</span>-(<span class="keyword">const</span> Point3d&amp;, <span class="keyword">const</span> Point3d&amp;);</span><br><span class="line">Point3d <span class="keyword">operator</span>*(<span class="keyword">const</span> Point3d&amp;, <span class="keyword">int</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 构造函数的编写可以如下：</span></span><br><span class="line">Point3d::Point3d(<span class="keyword">const</span> Point3d&amp; p) &#123;</span><br><span class="line">    x = p_x;</span><br><span class="line">    y = p_y;</span><br><span class="line">    z = p_z;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 更好的实现是使用memcpy</span></span><br><span class="line">Point3d::Point3d(<span class="keyword">const</span> Point3d&amp; p) &#123;</span><br><span class="line">    <span class="built_in">memcpy</span>(<span class="keyword">this</span>, &amp;p, <span class="keyword">sizeof</span>(Point3d));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然而memcpy和memset都需要类仅仅含有内置数据类型。</p>
+<p>如果含有虚函数或虚基类，vptr和虚基类指针/编译会被错误设置。</p>
+<h3 id="成员初始化列表-Member-Initialization-List"><a href="#成员初始化列表-Member-Initialization-List" class="headerlink" title="成员初始化列表(Member Initialization List)"></a>成员初始化列表(Member Initialization List)</h3><p>在以下情况，必须使用成员初始化列表</p>
+<ul>
+<li>初始化一个引用对象</li>
+<li>初始化const对象</li>
+<li>调用父类的构造函数，该构造函数有一组参数</li>
+<li>调用成员类对象的构造函数，构造函数有一组参数。</li>
+</ul>
+<p>如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Word</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Word() &#123;</span><br><span class="line">        name_ = <span class="number">0</span>;</span><br><span class="line">        cnt_ = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    String name_;</span><br><span class="line">    <span class="keyword">int</span> cnt_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>该构造函数会产生一个临时对象，并调用临时对象的operator=操作，最后调用析构函数。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 编译器改写</span></span><br><span class="line">Word::Word() &#123;</span><br><span class="line">	name_.String::String();</span><br><span class="line">    </span><br><span class="line">    String temp = String(<span class="number">0</span>);</span><br><span class="line">    name_,String::<span class="keyword">operator</span>=(temp);</span><br><span class="line">    temp.String::~String();</span><br><span class="line">    </span><br><span class="line">    cnt_ = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 较好的方式</span></span><br><span class="line">Word::Word() : name_(<span class="number">0</span>) &#123;</span><br><span class="line">    cnt_ = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 编译器改写</span></span><br><span class="line">Word::Word() &#123;</span><br><span class="line">    name_.String::String(<span class="number">0</span>);</span><br><span class="line">    cnt_ = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="陷阱"><a href="#陷阱" class="headerlink" title="陷阱"></a>陷阱</h4><p><strong><em>成员初始化列表的顺序</em></strong></p>
+<p>初始化列表中的排列方式并不会影响其初始化顺序，在类中的声明顺序才会决定其初始化顺序。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    X(<span class="keyword">int</span> val) : j(val), i(j) &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>上述代码的本意是先将val值给j，然后将j的值给i，然而真正的执行顺序是按照声明顺序，即将j的值给i，再将val的值给j。</p>
+<p>为了达成以上目的，应该这么写：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">X::X(<span class="keyword">int</span> val) : j(val) &#123;</span><br><span class="line">    i = j;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>成员初始化列表中的操作是位于函数体内语句之前，因此这样可以正常执行。</p>
+<p><strong>初始化列表与成员函数</strong></p>
+<p>考虑如下构造函数：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">X::X(<span class="keyword">int</span> val) : i(Func(val)), j(val) &#123;&#125;</span><br><span class="line"><span class="comment">// Func是X的成员函数</span></span><br></pre></td></tr></table></figure>
+
+<p>这样写是正确的，然而存在不确定性，因为你并不知道Func对于类X的依赖性是多少。</p>
+<p>因此，将初始化过程放在函数体中执行。</p>
+<p><strong>子类的成员函数返回值作为父类构造函数的参数</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FooBar</span> :</span> <span class="keyword">public</span> X &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> fval_;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">fval</span><span class="params">()</span> </span>&#123; <span class="keyword">return</span> fval_; &#125;;</span><br><span class="line">    </span><br><span class="line">    FooBar(<span class="keyword">int</span> val) : fval_(val), X(fval()) &#123;&#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>编译器改写：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">FooBar::FooBar &#123;</span><br><span class="line">    X::X(<span class="keyword">this</span>, <span class="keyword">this</span>-&gt;fval());</span><br><span class="line">    </span><br><span class="line">    fval_ = val;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>显然，很糟糕。</p>
+<p><strong>总结</strong></p>
+<p>编译器会按照变量声明顺序，对初始化列表的顺序重新排列。且会在构造函数中插入代码，这些代码都位于用户编写的代码之前。</p>
+
       
 
       
@@ -403,16 +397,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          c++对象模型--第三章-数据
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">c++对象模型--第一章-关于对象</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -432,189 +494,14 @@
 
 
 
-
   
-    <article id="post-c-对象模型-第一章-关于对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">c++对象模型--第一章-关于对象</a>
-    </h1>
   
 
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/" class="archive-article-date">
-  	<time datetime="2020-11-17T05:57:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="c-对象模型"><a href="#c-对象模型" class="headerlink" title="c++对象模型"></a>c++对象模型</h4><p>类的<strong>非static成员变量</strong>在类之中，<strong>static成员变量</strong>和<strong>staic/非static成员函数</strong>在类之外。</p>
-<p>虚函数会在对象存储一个<strong>虚函数表指针(vptr)**，该指针指向相关的</strong>虚函数表(vtbl)**，vptr的初始化、重置由类的构造、析构、赋值决定。每一个类的type_info由vtbl指出，存储在第一个表项中。</p>
-<h4 id="类的内存大小"><a href="#类的内存大小" class="headerlink" title="类的内存大小"></a>类的内存大小</h4><ul>
-<li>非static成员变量的大小总和</li>
-<li>内存对齐，4bytes的整数倍</li>
-<li>支持虚函数和虚继承的额外开销</li>
-</ul>
-<h4 id="多态中的指针"><a href="#多态中的指针" class="headerlink" title="多态中的指针"></a>多态中的指针</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZooAnimal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">dance</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> ioc;</span><br><span class="line">    String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bear</span> :</span> <span class="keyword">public</span> ZooAnimal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Dances</span> &#123;</span>...&#125;;</span><br><span class="line">    </span><br><span class="line">    Dances dances;</span><br><span class="line">    <span class="keyword">int</span> cell_block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如上的继承体系，Bear类的内存情况如下：</p>
-<img src="images\image-20201111102947075.png" alt="image-20201111102947075" style="zoom:60%;" />
-
-<p>解析时，指针根据指针的类型，读取对应大小的内存</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-目标" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">目标</a>
-    </h1>
   
 
-        
-        <a href="/2020/11/16/%E7%9B%AE%E6%A0%87/" class="archive-article-date">
-  	<time datetime="2020-11-16T10:40:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="小目标"><a href="#小目标" class="headerlink" title="小目标"></a>小目标</h3><ul>
-<li>整明白c++<ul>
-<li>对象（c++对象模型）</li>
-<li>并发（并发编程实战）</li>
-<li>网络io（unix网络编程、linux高性能服务器）</li>
-<li>数据库</li>
-<li>linux（私房菜）</li>
-<li>stl（stl源码）</li>
-<li>有空看看template（c++ templates 第二版还没有中文）</li>
-</ul>
-</li>
-<li>要求<ul>
-<li>造个json的轮子</li>
-<li>做个http服务器</li>
-<li>实现几个stl，allocator</li>
-</ul>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">该做的事</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
+
   
 
 
@@ -637,8 +524,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

@@ -6,15 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Cytify</title>
+  <title>c++对象模型--第一章-关于对象 | Cytify</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Cytify">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="c++对象模型类的非static成员变量在类之中，static成员变量和staic&#x2F;非static成员函数在类之外。 虚函数会在对象存储一个虚函数表指针(vptr)**，该指针指向相关的虚函数表(vtbl)**，vptr的初始化、重置由类的构造、析构、赋值决定。每一个类的type_info由vtbl指出，存储在第一个表项中。 类的内存大小 非static成员变量的大小总和 内存对齐，4bytes的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++对象模型--第一章-关于对象">
+<meta property="og:url" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/index.html">
 <meta property="og:site_name" content="Cytify">
+<meta property="og:description" content="c++对象模型类的非static成员变量在类之中，static成员变量和staic&#x2F;非static成员函数在类之外。 虚函数会在对象存储一个虚函数表指针(vptr)**，该指针指向相关的虚函数表(vtbl)**，vptr的初始化、重置由类的构造、析构、赋值决定。每一个类的type_info由vtbl指出，存储在第一个表项中。 类的内存大小 非static成员变量的大小总和 内存对齐，4bytes的">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/images/image-20201111102947075.png">
+<meta property="article:published_time" content="2020-11-17T05:57:23.000Z">
+<meta property="article:modified_time" content="2020-11-17T06:01:26.747Z">
 <meta property="article:author" content="Cytify">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="c++对象模型">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/images/image-20201111102947075.png">
   
     <link rel="alternative" href="/atom.xml" title="Cytify" type="application/atom+xml">
   
@@ -128,320 +136,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-c-对象模型-第四章-函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-c-对象模型-第一章-关于对象" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">c++对象模型--第四章-函数</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:21:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="成员函数的调用"><a href="#成员函数的调用" class="headerlink" title="成员函数的调用"></a>成员函数的调用</h3><h4 id="非静态成员函数-Nonstaic-Member-Function"><a href="#非静态成员函数-Nonstaic-Member-Function" class="headerlink" title="非静态成员函数(Nonstaic Member Function)"></a>非静态成员函数(Nonstaic Member Function)</h4><p><strong>成员函数</strong>会经过编译器转换为<strong>非成员函数</strong>：</p>
-<ul>
-<li><p>改变函数的声明，新增一个额外参数，用于访问类内的数据和函数。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span>;</span></span><br><span class="line"><span class="comment">// non-const</span></span><br><span class="line"><span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">()</span></span>; -&gt; <span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">(Point3d *<span class="keyword">const</span> <span class="keyword">this</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// const</span></span><br><span class="line"><span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">()</span> <span class="keyword">const</span></span>; -&gt; <span class="function">Point3d <span class="title">Point3d::Magnitude</span><span class="params">(<span class="keyword">const</span> Point3d *<span class="keyword">const</span> <span class="keyword">this</span>)</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>对成员的访问操作变为<strong>this指针</strong>的访问</p>
-</li>
-<li><p>转换函数名称——<strong>mangling方法</strong>(第三章数据部分提到，用于转换static变量名)</p>
-</li>
-<li><p>转换后，函数的调用也需要被转换</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span>;</span></span><br><span class="line">Point3d obj;</span><br><span class="line">Point3d *ptr = <span class="keyword">new</span> Point3d;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 假设Magnitude名称转换为Magnitude_7Point3dFv</span></span><br><span class="line">obj.Magnitude(); -&gt; Magnitude_7Point3dFv(&amp;obj);</span><br><span class="line">ptr-&gt;Magnitude(); -&gt; Magnitude_7Point3dFv(ptr);</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
-<p>假设有如下代码：</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point3d <span class="title">Point3d::Normalize</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = Magnitude();</span><br><span class="line">    <span class="keyword">return</span> Point3d( x_/msg, y_/msg, z_/msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 经过转换，以及NRV优化</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Normalize_7Point3dFv</span><span class="params">(<span class="keyword">register</span> <span class="keyword">const</span> Point3d* <span class="keyword">const</span> <span class="keyword">this</span>, Point3d&amp; _result)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = <span class="keyword">this</span>-&gt;Magnitude();</span><br><span class="line">    _result.Point3d::Point3d(<span class="keyword">this</span>-&gt;x_/msg, <span class="keyword">this</span>-&gt;y_/msg, <span class="keyword">this</span>-&gt;z_/msg);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第三章-数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">c++对象模型--第三章-数据</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="类的大小"><a href="#类的大小" class="headerlink" title="类的大小"></a>类的大小</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Y</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Z</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> ;</span> <span class="keyword">public</span> Y, <span class="keyword">public</span> Z &#123;&#125;:</span><br></pre></td></tr></table></figure>
-
-<p>以上的继承体系中，类的大小会根据编译器的处理而变化。</p>
-<ul>
-<li><p>X为1bytes，Y，Z为8bytes，A为12bytes</p>
-<p><strong>X为1bytes</strong></p>
-<p>编译器为了确保<strong>类的不同对象具有不同地址</strong>，会为空类内部安插一个char。</p>
-<p><strong>Y，Z为8bytes</strong></p>
-<p>首先，我们需要知道，Y，Z的大小收到三部分影响：</p>
-<ul>
-<li><p><strong>语言本身的负担</strong></p>
-<p>虚基类、虚函数都会是类内部扩张，具体显示在某种形式的指针(或offset)上。</p>
-<p>虚基类的指针会指向虚基类或相关表格或具体偏移量。</p>
-<p>虚函数的指针则是指向虚函数表。</p>
-</li>
-<li><p><strong>编译器对特殊情况的优化</strong></p>
-<p>Y，Z是空类，因此需要一个char，被放在类的固定部分的尾部。</p>
-<p>某些编译器会对空虚基类进行特殊支持。</p>
-</li>
-<li><p><strong>内存地址对齐</strong></p>
-<p>为了使的读取更有效率，会将内存扩大到4的倍数。</p>
-</li>
-</ul>
-<img src="images\image-20201113112204067.png" alt="image-20201113112204067" style="zoom:67%;" />
-
-<p><strong>A的12bytes</strong></p>
-<p><strong>一个虚基类只会在子类中存在一份实例</strong></p>
-<p>因此，A的大小如下：</p>
-<ul>
-<li>唯一一份X的实例，1bytes</li>
-<li>父类Y的大小，减去虚基类的就开销，结果使4bytes，X同理</li>
-<li>A自己的大小，0</li>
-<li>对齐，前三项为9bytes，因此最终是12bytes</li>
-</ul>
-</li>
-<li><p>X为1bytes，Y，Z为4bytes，A为8bytes</p>
-<p><strong>Y，Z为4bytes</strong></p>
-<p>有些编译器对空虚基类优化，将其放到子类的最初部分，这样子类就有了member，也就不会有第二点1个char的填充，也不需要对齐，因此只需4bytes。</p>
-<p><strong>A为8bytes</strong></p>
-<p>有些编译器对空虚基类优化，X实例的1bytes可以省略，因此也没有对齐，所以使8bytes</p>
-<p>注意：编译器的的优化仅仅针对<strong>空虚基类</strong></p>
-</li>
-</ul>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第二章-构造函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">c++对象模型--第二章-构造函数</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:01:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="默认构造函数的生成"><a href="#默认构造函数的生成" class="headerlink" title="默认构造函数的生成"></a>默认构造函数的生成</h3><p>并不是类没有构造函数时，编译器都会创建一个默认构造函数，<strong>只有当编译器需要的时候，才会创建一个默认构造函数</strong>。</p>
-<p>而如果是程序的需要，那就是程序员的责任去创建构造函数。</p>
-<p>c++95声明，当没有用户定义的构造函数时，会隐式创建一个默认构造函数，然而这个<strong>隐式构造函数</strong>是<strong>trivial的(无能的)</strong></p>
-<h4 id="带有默认构造函数的成员类对象"><a href="#带有默认构造函数的成员类对象" class="headerlink" title="带有默认构造函数的成员类对象"></a>带有默认构造函数的成员类对象</h4><p>如果类没有构造函数，但是其<strong>成员类对象</strong>拥有默认构造函数，那么该类的隐式默认构造函数就是**nontrivial(有用的)**，编译器就会在构造函数被调用时创建一个隐式构默认造函数。</p>
-<p>为了解决不同文件中的同一个类多次创建问题，即在A文件中调用C类，在B文件中调用C类，会将创建的构造、析构、复制构造、赋值以inline方式完成，如果函数太复杂，就会创建explicit non-inline static函数。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo foo;</span><br><span class="line">    <span class="keyword">char</span>* str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>此时编译器为了满足自身要求，会创建要给构造函数，大体如下：</p>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第一章-关于对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">c++对象模型--第一章-关于对象</a>
+    <h1 class="article-title" itemprop="name">
+      c++对象模型--第一章-关于对象
     </h1>
   
 
@@ -493,16 +195,84 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          c++对象模型--第二章-构造函数
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/11/16/%E7%9B%AE%E6%A0%87/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">目标</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -522,99 +292,14 @@
 
 
 
-
   
-    <article id="post-目标" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">目标</a>
-    </h1>
   
 
-        
-        <a href="/2020/11/16/%E7%9B%AE%E6%A0%87/" class="archive-article-date">
-  	<time datetime="2020-11-16T10:40:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="小目标"><a href="#小目标" class="headerlink" title="小目标"></a>小目标</h3><ul>
-<li>整明白c++<ul>
-<li>对象（c++对象模型）</li>
-<li>并发（并发编程实战）</li>
-<li>网络io（unix网络编程、linux高性能服务器）</li>
-<li>数据库</li>
-<li>linux（私房菜）</li>
-<li>stl（stl源码）</li>
-<li>有空看看template（c++ templates 第二版还没有中文）</li>
-</ul>
-</li>
-<li>要求<ul>
-<li>造个json的轮子</li>
-<li>做个http服务器</li>
-<li>实现几个stl，allocator</li>
-</ul>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">该做的事</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
+  
 
   
+
   
 
 
@@ -637,8 +322,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

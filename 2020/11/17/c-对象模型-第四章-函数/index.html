@@ -6,15 +6,27 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://example.com">
-  <title>Cytify</title>
+  <title>c++对象模型--第四章-函数 | Cytify</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Cytify">
-<meta property="og:url" content="http://example.com/index.html">
+  <meta name="description" content="成员函数的调用非静态成员函数(Nonstaic Member Function)成员函数会经过编译器转换为非成员函数：  改变函数的声明，新增一个额外参数，用于访问类内的数据和函数。 123456class Point3d;&#x2F;&#x2F; non-constPoint3d Point3d::Magnitude(); -&gt; Point3d Point3d::Magnitude(Point3d *cons">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++对象模型--第四章-函数">
+<meta property="og:url" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/index.html">
 <meta property="og:site_name" content="Cytify">
+<meta property="og:description" content="成员函数的调用非静态成员函数(Nonstaic Member Function)成员函数会经过编译器转换为非成员函数：  改变函数的声明，新增一个额外参数，用于访问类内的数据和函数。 123456class Point3d;&#x2F;&#x2F; non-constPoint3d Point3d::Magnitude(); -&gt; Point3d Point3d::Magnitude(Point3d *cons">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117093220735.png">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117100521963.png">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117102619630.png">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117103113863.png">
+<meta property="og:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117110854558.png">
+<meta property="article:published_time" content="2020-11-17T06:21:11.000Z">
+<meta property="article:modified_time" content="2020-11-17T06:26:15.260Z">
 <meta property="article:author" content="Cytify">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="c++对象模型">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/images/image-20201117093220735.png">
   
     <link rel="alternative" href="/atom.xml" title="Cytify" type="application/atom+xml">
   
@@ -128,16 +140,14 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-c-对象模型-第四章-函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="post-c-对象模型-第四章-函数" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">c++对象模型--第四章-函数</a>
+    <h1 class="article-title" itemprop="name">
+      c++对象模型--第四章-函数
     </h1>
   
 
@@ -166,307 +176,162 @@
 </ul>
 <p>假设有如下代码：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point3d <span class="title">Point3d::Normalize</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = Magnitude();</span><br><span class="line">    <span class="keyword">return</span> Point3d( x_/msg, y_/msg, z_/msg);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 经过转换，以及NRV优化</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Normalize_7Point3dFv</span><span class="params">(<span class="keyword">register</span> <span class="keyword">const</span> Point3d* <span class="keyword">const</span> <span class="keyword">this</span>, Point3d&amp; _result)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = <span class="keyword">this</span>-&gt;Magnitude();</span><br><span class="line">    _result.Point3d::Point3d(<span class="keyword">this</span>-&gt;x_/msg, <span class="keyword">this</span>-&gt;y_/msg, <span class="keyword">this</span>-&gt;z_/msg);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/#more">more >></a>
-        
-      
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<a id="more"></a>
 
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第三章-数据" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">c++对象模型--第三章-数据</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:12:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="类的大小"><a href="#类的大小" class="headerlink" title="类的大小"></a>类的大小</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">X</span> &#123;</span>&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Y</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Z</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> X &#123;&#125;;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> ;</span> <span class="keyword">public</span> Y, <span class="keyword">public</span> Z &#123;&#125;:</span><br></pre></td></tr></table></figure>
-
-<p>以上的继承体系中，类的大小会根据编译器的处理而变化。</p>
+<h4 id="函数名称转换-Name-Mangling"><a href="#函数名称转换-Name-Mangling" class="headerlink" title="函数名称转换(Name Mangling)"></a>函数名称转换(Name Mangling)</h4><p>不同编译器的做法不同。以下仅介绍<strong>cfront</strong>的做法。</p>
 <ul>
-<li><p>X为1bytes，Y，Z为8bytes，A为12bytes</p>
-<p><strong>X为1bytes</strong></p>
-<p>编译器为了确保<strong>类的不同对象具有不同地址</strong>，会为空类内部安插一个char。</p>
-<p><strong>Y，Z为8bytes</strong></p>
-<p>首先，我们需要知道，Y，Z的大小收到三部分影响：</p>
+<li><p>类的数据成员通常会加上类名，会变成独特的名称。可以有效防止<strong>子类和父类拥有相同变量名</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> &#123;</span> </span><br><span class="line"><span class="keyword">public</span>: </span><br><span class="line">    <span class="keyword">int</span> val_; -&gt; val_3Bar</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> :</span> <span class="keyword">public</span> Bar &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">int</span> val_; -&gt; val_3Foo</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>函数由于可以<strong>重载</strong>。会在函数名后加上类名，<strong>再加上参数列表中的类型</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">x</span><span class="params">(<span class="keyword">float</span> x)</span></span>; -&gt; <span class="function"><span class="keyword">void</span> <span class="title">x_5PointFf</span><span class="params">(<span class="keyword">float</span> x)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">x</span><span class="params">(<span class="keyword">float</span> x, <span class="keyword">float</span> y)</span></span>; -&gt; <span class="function"><span class="keyword">void</span> <span class="title">x_5PointFff</span><span class="params">(<span class="keyword">float</span> x, <span class="keyword">float</span> y)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>名称转换的目的是为了使<strong>不正确的调用操作在链接期就被检测出来</strong>。比如重载函数调用不正确等。</p>
+</li>
+</ul>
+<h4 id="虚成员函数-Virtual-Member-Function"><a href="#虚成员函数-Virtual-Member-Function" class="headerlink" title="虚成员函数(Virtual Member Function)"></a>虚成员函数(Virtual Member Function)</h4><p>虚函数通过<strong>虚函数指针</strong>指向的<strong>虚函数表</strong>调用。</p>
+<p>虚函数表，第一格是RTTI有关数据，之后的是虚函数地址。有些编译器将<strong>虚函数表-1位置</strong>设置为虚基类地址/偏移。</p>
+<p><strong>虚函数的转换</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ptr-&gt;Normalize(); -&gt; (*ptr-&gt;vptr[<span class="number">1</span>])(ptr);</span><br></pre></td></tr></table></figure>
+
 <ul>
-<li><p><strong>语言本身的负担</strong></p>
-<p>虚基类、虚函数都会是类内部扩张，具体显示在某种形式的指针(或offset)上。</p>
-<p>虚基类的指针会指向虚基类或相关表格或具体偏移量。</p>
-<p>虚函数的指针则是指向虚函数表。</p>
-</li>
-<li><p><strong>编译器对特殊情况的优化</strong></p>
-<p>Y，Z是空类，因此需要一个char，被放在类的固定部分的尾部。</p>
-<p>某些编译器会对空虚基类进行特殊支持。</p>
-</li>
-<li><p><strong>内存地址对齐</strong></p>
-<p>为了使的读取更有效率，会将内存扩大到4的倍数。</p>
-</li>
+<li>vptr为虚函数指针，在<strong>单继承体系中只有一个</strong>，但是在<strong>多继承体系中会有多个</strong>，因此有可能需要名称转换。</li>
+<li>vptr[1]是函数的地址，即<code>Noemalize()</code>函数地址。</li>
+<li>第二个ptr为<strong>this</strong>指针。</li>
 </ul>
-<img src="images\image-20201113112204067.png" alt="image-20201113112204067" style="zoom:67%;" />
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Point3d <span class="title">Point3d::Normalize</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">register</span> <span class="keyword">float</span> msg = Magnitude();</span><br><span class="line">    <span class="keyword">return</span> Point3d( x_/msg, y_/msg, z_/msg);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 假设Magnitude和Noemalize都是虚函数</span></span><br></pre></td></tr></table></figure>
 
-<p><strong>A的12bytes</strong></p>
-<p><strong>一个虚基类只会在子类中存在一份实例</strong></p>
-<p>因此，A的大小如下：</p>
+<p><strong>优化tips</strong></p>
 <ul>
-<li>唯一一份X的实例，1bytes</li>
-<li>父类Y的大小，减去虚基类的就开销，结果使4bytes，X同理</li>
-<li>A自己的大小，0</li>
-<li>对齐，前三项为9bytes，因此最终是12bytes</li>
-</ul>
+<li><p>因为<strong>Magnitude()**是确定的，所以直接</strong>显式调用**会比虚指针转换调用更好。</p>
+<p>即，<code>register float msg = Point3d::Magnitude();</code></p>
 </li>
-<li><p>X为1bytes，Y，Z为4bytes，A为8bytes</p>
-<p><strong>Y，Z为4bytes</strong></p>
-<p>有些编译器对空虚基类优化，将其放到子类的最初部分，这样子类就有了member，也就不会有第二点1个char的填充，也不需要对齐，因此只需4bytes。</p>
-<p><strong>A为8bytes</strong></p>
-<p>有些编译器对空虚基类优化，X实例的1bytes可以省略，因此也没有对齐，所以使8bytes</p>
-<p>注意：编译器的的优化仅仅针对<strong>空虚基类</strong></p>
+<li><p><strong>显式调用虚函数</strong>，调用过程与<strong>非静态成员函数</strong>相同</p>
+</li>
+<li><p><code>Magnitude()</code>编写为<strong>内联函数</strong>，更有效率</p>
 </li>
 </ul>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/#more">more >></a>
-        
-      
+<h4 id="静态成员函数-Static-Member-Function"><a href="#静态成员函数-Static-Member-Function" class="headerlink" title="静态成员函数(Static Member Function)"></a>静态成员函数(Static Member Function)</h4><p>静态函数的调用与非静态成员函数<strong>类似</strong>，但有<strong>区别</strong>，**不会增加额外参数(this指针)**。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj.Noemalize(); -&gt; Normalize_7Point3dSFv();</span><br><span class="line">ptr-&gt;Normalize(); -&gt; Normalize_7Point3dSFv();</span><br></pre></td></tr></table></figure>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<ul>
+<li><p>静态成员函数也需要被转化，其中SFv表示是静态成员函数</p>
+</li>
+<li><p>静态成员函数<strong>不需要通过类的实例调用</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">foo.Obj() &gt; <span class="number">1</span>;</span><br><span class="line"><span class="comment">// 转换为</span></span><br><span class="line">(<span class="keyword">void</span>) foo(); <span class="comment">// NRV</span></span><br><span class="line">Point3d::Obj() &gt; <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
 
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第二章-构造函数" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">c++对象模型--第二章-构造函数</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/" class="archive-article-date">
-  	<time datetime="2020-11-17T06:01:52.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="默认构造函数的生成"><a href="#默认构造函数的生成" class="headerlink" title="默认构造函数的生成"></a>默认构造函数的生成</h3><p>并不是类没有构造函数时，编译器都会创建一个默认构造函数，<strong>只有当编译器需要的时候，才会创建一个默认构造函数</strong>。</p>
-<p>而如果是程序的需要，那就是程序员的责任去创建构造函数。</p>
-<p>c++95声明，当没有用户定义的构造函数时，会隐式创建一个默认构造函数，然而这个<strong>隐式构造函数</strong>是<strong>trivial的(无能的)</strong></p>
-<h4 id="带有默认构造函数的成员类对象"><a href="#带有默认构造函数的成员类对象" class="headerlink" title="带有默认构造函数的成员类对象"></a>带有默认构造函数的成员类对象</h4><p>如果类没有构造函数，但是其<strong>成员类对象</strong>拥有默认构造函数，那么该类的隐式默认构造函数就是**nontrivial(有用的)**，编译器就会在构造函数被调用时创建一个隐式构默认造函数。</p>
-<p>为了解决不同文件中的同一个类多次创建问题，即在A文件中调用C类，在B文件中调用C类，会将创建的构造、析构、复制构造、赋值以inline方式完成，如果函数太复杂，就会创建explicit non-inline static函数。</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bar</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Foo foo;</span><br><span class="line">    <span class="keyword">char</span>* str;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>此时编译器为了满足自身要求，会创建要给构造函数，大体如下：</p>
-        
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">c++</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">c++对象模型</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-c-对象模型-第一章-关于对象" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">c++对象模型--第一章-关于对象</a>
-    </h1>
-  
-
-        
-        <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/" class="archive-article-date">
-  	<time datetime="2020-11-17T05:57:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="c-对象模型"><a href="#c-对象模型" class="headerlink" title="c++对象模型"></a>c++对象模型</h4><p>类的<strong>非static成员变量</strong>在类之中，<strong>static成员变量</strong>和<strong>staic/非static成员函数</strong>在类之外。</p>
-<p>虚函数会在对象存储一个<strong>虚函数表指针(vptr)**，该指针指向相关的</strong>虚函数表(vtbl)**，vptr的初始化、重置由类的构造、析构、赋值决定。每一个类的type_info由vtbl指出，存储在第一个表项中。</p>
-<h4 id="类的内存大小"><a href="#类的内存大小" class="headerlink" title="类的内存大小"></a>类的内存大小</h4><ul>
-<li>非static成员变量的大小总和</li>
-<li>内存对齐，4bytes的整数倍</li>
-<li>支持虚函数和虚继承的额外开销</li>
+<p>这样会有<strong>额外成本</strong></p>
+</li>
+<li><p>静态成员函数的地址是<strong>非成员函数</strong>的地址</p>
+<p><code>&amp;Point3d::Obj(); == unsigned int (*)(); != unsigned int (Point3d::*)();</code></p>
+</li>
+<li><p>静态成员函数可以便于成为<strong>回调函数(callback)**，可用于</strong>线程函数(pthread)**</p>
+</li>
 </ul>
-<h4 id="多态中的指针"><a href="#多态中的指针" class="headerlink" title="多态中的指针"></a>多态中的指针</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ZooAnimal</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">dance</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> ioc;</span><br><span class="line">    String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Bear</span> :</span> <span class="keyword">public</span> ZooAnimal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="class"><span class="keyword">enum</span> <span class="title">Dances</span> &#123;</span>...&#125;;</span><br><span class="line">    </span><br><span class="line">    Dances dances;</span><br><span class="line">    <span class="keyword">int</span> cell_block;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="虚函数-Virtual-Member-Function"><a href="#虚函数-Virtual-Member-Function" class="headerlink" title="虚函数(Virtual Member Function)"></a>虚函数(Virtual Member Function)</h3><h4 id="单一继承"><a href="#单一继承" class="headerlink" title="单一继承"></a>单一继承</h4><p>为了支持多态，需要对类提供额外的<strong>执行期信息</strong>。</p>
+<ul>
+<li>每个对象设置一个<strong>虚指针</strong>，指向<strong>虚函数表</strong></li>
+<li>虚函数表中设置类的<strong>类型信息</strong>（支持RTTI），以及<strong>虚函数地址</strong></li>
+</ul>
+<p>对于虚函数的<strong>继承</strong>来说，会有以下操作：</p>
+<ul>
+<li>父类的虚函数会被子类继承</li>
+<li>子类的虚函数会重载父类的虚函数，即在虚函数表中覆盖父类虚函数</li>
+<li>子类的新虚函数会加入到虚函数表中，新的虚函数会被放到虚函数表末尾</li>
+<li>存在一个<code>pure_virtual_called()</code>函数，它可以是纯虚函数，也可以当作执行器异常处理函数</li>
+</ul>
+<p>如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Point();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> POint&amp; <span class="title">Mult</span><span class="params">(<span class="keyword">float</span>)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">y</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">z</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> <span class="number">0</span>; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> x_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point2d</span> :</span> <span class="keyword">public</span> Point &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Point2d();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> POint2d&amp; <span class="title">Mult</span><span class="params">(<span class="keyword">float</span>)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">y</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> y_; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> y_;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span> :</span> <span class="keyword">public</span> Point2d &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~Point3d();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> POint3d&amp; <span class="title">Mult</span><span class="params">(<span class="keyword">float</span>)</span> </span>= <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">z</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> z_; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> z_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>如上的继承体系，Bear类的内存情况如下：</p>
-<img src="images\image-20201111102947075.png" alt="image-20201111102947075" style="zoom:60%;" />
+<img src="images\image-20201117093220735.png" alt="image-20201117093220735" style="zoom:80%;" />
 
-<p>解析时，指针根据指针的类型，读取对应大小的内存</p>
+<p>因此，<code>ptr-&gt;z();</code>会被转换为<code>(ptr-&gt;_vptr[4])(ptr)</code></p>
+<p>这一转换在编译器即可完成，但在执行期才能知道调用的是哪一个类的<code>z()</code></p>
+<h4 id="多继承"><a href="#多继承" class="headerlink" title="多继承"></a>多继承</h4><p>复杂度主要是：第二个之后的父类，以及调用时<strong>this指针的转换问题</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base1</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Base1();</span><br><span class="line">    <span class="keyword">virtual</span> ~Base1();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">SpeakClearly</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Base1* <span class="title">Clone</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> data_base1_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base2</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Base2();</span><br><span class="line">    <span class="keyword">virtual</span> ~Base2();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Mumble</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Base2* <span class="title">Clone</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> data_base2_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Derived</span> :</span> <span class="keyword">public</span> Base1, <span class="keyword">public</span> Base2 &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Derived();</span><br><span class="line">    <span class="keyword">virtual</span> ~Derived();</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> Derived* <span class="title">Clone</span><span class="params">()</span> <span class="keyword">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> data_derived_;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>如果以父类指针指向子类，则对于Base1则没问题，因为Base1地址与子类地址相同，而Base2则需要<strong>加减偏移this指针</strong>来对齐地址。在调用析构函数时也需要<strong>调整this指针</strong>。</p>
+<p>假设有 <code>Base2 *pbase2 = new Derived</code>，Derived对象的地址需要被调整到Base2子对象的地址。</p>
+<p><code>Derived *temp = new Derived;</code></p>
+<p><code>Base2 *pbase2 = tmep ? temp + sizeof(Base1) : 0;</code></p>
+<p>在删除时，也需要调整指针到整个Derived对象地址。</p>
+<p><strong>多重继承之下的含有虚函数的对象模型</strong>：</p>
+<ul>
+<li><strong>含有多个虚函数表</strong>，虚函数表数目与父类数目有关</li>
+<li>每一个虚函数表，子类都有一个<strong>虚指针对应</strong></li>
+</ul>
+<p>对于本例，则有两个虚函数表创建</p>
+<ul>
+<li>一个<strong>主要实例</strong>，子类的虚函数表，与最左端的Base1类<strong>共享</strong>，涵盖整个对象的虚函数</li>
+<li>一个<strong>次要实例</strong>，与Base2类相关，不包含Base1，即左边的父类的相关虚函数</li>
+</ul>
+<img src="images\image-20201117100521963.png" alt="image-20201117100521963" style="zoom:80%;" />
+
+<p>例如：<code>Base *pb1 = new Derived; Base2 *pb2 = pb1-&gt;Clone();</code></p>
+<p>pb1首先加上offset，调整到Derived类地址，调用<code>Derived::Clone()</code>，返回值需要减去offset，调整到Base2的地址。</p>
+<p><strong>Sun编译器</strong></p>
+<p>Sun编译器为了解决多虚函数表问题，将虚函数表连在一起，加上指针指向下一个虚函数表，提升了项目的速度。</p>
+<p>在虚函数足够小时，使用<strong>split function</strong>，将函数调整为两个函数，第二个在返回之前，为指针加减offset。</p>
+<p>因此，Base1指针和Derived指针不需要调整this指针，而Base2指针调用的是新的函数。</p>
+<p><strong>Microsoft</strong>使用<strong>address points</strong>的方法。</p>
+<h4 id="虚拟继承"><a href="#虚拟继承" class="headerlink" title="虚拟继承"></a>虚拟继承</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point2d</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	Point2d(<span class="keyword">float</span> = <span class="number">0.0</span>, <span class="keyword">float</span> =<span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">virtual</span> ~Point2d();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">Mumble</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">Z</span><span class="params">()</span>:</span></span><br><span class="line"><span class="function"><span class="keyword">private</span>:</span></span><br><span class="line">	float x_, y_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Point3d</span> :</span> <span class="keyword">public</span> <span class="keyword">virtual</span> Point2d &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Point3d(<span class="keyword">float</span> = <span class="number">0.0</span>, <span class="keyword">float</span> = <span class="number">0.0</span>, <span class="keyword">float</span> = <span class="number">0.0</span>);</span><br><span class="line">    <span class="keyword">virtual</span> ~Point3d();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">float</span> <span class="title">Z</span><span class="params">()</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">float</span> z_;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<img src="images\image-20201117102619630.png" alt="image-20201117102619630" style="zoom:80%;" />
+
+<p>不同编译器对于虚继承下的虚函数有着眼花缭乱的支持，这里不做详述，太怪异了。</p>
+<p>但是谨记，<strong>不要在虚基类中声明非静态数据成员</strong>。</p>
+<h3 id="函数的效率"><a href="#函数的效率" class="headerlink" title="函数的效率"></a>函数的效率</h3><img src="images\image-20201117103113863.png" alt="image-20201117103113863" style="zoom:80%;" />
+
+<p><strong>友元函数、静态成员函数、非静态成员函数</strong>的效率差不多，这是易于理解的，因为三者最终的调用方式相同，都被<strong>转换为非成员函数</strong>。</p>
+<p><strong>单继承虚函数</strong>需要通过构造函数设定vptr，所以效率降低了。</p>
+<p><strong>多继承虚函数</strong>有多方面因素，因为多继承，所以构造函数需要多调用一次，其次，可能需要调整this指针而导致效率进一步降低。</p>
+<p><strong>虚拟继承虚函数</strong>与多继承类似</p>
+<h3 id="指向成员函数的指针"><a href="#指向成员函数的指针" class="headerlink" title="指向成员函数的指针"></a>指向成员函数的指针</h3><h4 id="非静态、非虚成员函数指针"><a href="#非静态、非虚成员函数指针" class="headerlink" title="非静态、非虚成员函数指针"></a>非静态、非虚成员函数指针</h4><ul>
+<li>取<strong>非静态、非虚成员函数</strong>的地址，得到的是<strong>真正地址</strong>，但是调用的话需要绑定一个<strong>函数对象</strong>。</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">Point::M</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 声明如下</span></span><br><span class="line"><span class="keyword">double</span> (Point:: *ptr_f) ();</span><br><span class="line"><span class="comment">// 调用</span></span><br><span class="line">origin.*ptr_f(); -&gt; (ptr_f)(&amp;origin);</span><br><span class="line">ptr-&gt;*ptr_f(); -&gt; (ptr_f)(ptr);</span><br></pre></td></tr></table></figure>
+
+<h4 id="虚成员函数指针"><a href="#虚成员函数指针" class="headerlink" title="虚成员函数指针"></a>虚成员函数指针</h4><ul>
+<li>取虚函数的地址，得到的是其在<strong>虚函数表中的下标</strong>。（<em>在vs2019上测试，结果并不是这样，得到的是一个内存地址</em>）</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">float</span> (Point:: *ptr_f) ();</span><br><span class="line">Point *ptr = <span class="keyword">new</span> Point3d;</span><br><span class="line"></span><br><span class="line">(ptr-&gt;*ptr_f)(); -&gt; *(ptr-&gt;vptr[(<span class="keyword">int</span>)ptr_f])(ptr);</span><br></pre></td></tr></table></figure>
+
+<p>为了区分函数指针指向的是非虚函数还是虚函数，编译器必须使<code>ptr_f</code>能够持有<strong>两种值</strong>，且<strong>可以被区分是内存地址还是虚函数表的下标</strong></p>
+<p>在cfron中，如此判断</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(((<span class="keyword">int</span>) ptr_f) &amp; ~<span class="number">127</span>) ? (*ptr_f)(ptr) : *(ptr-&gt;vptr[(<span class="keyword">int</span>)ptr_f])(ptr);</span><br></pre></td></tr></table></figure>
+
+<p>这样只能限制最多只有128个虚函数。</p>
+<h4 id="多重继承下，成员函数指针"><a href="#多重继承下，成员函数指针" class="headerlink" title="多重继承下，成员函数指针"></a>多重继承下，成员函数指针</h4><p>为了使成员函数指针支持多重继承和虚拟继承，有以下结构体</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">mptr</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> delta;</span><br><span class="line">    <span class="keyword">int</span> index;</span><br><span class="line">    <span class="class"><span class="keyword">union</span> &#123;</span></span><br><span class="line">        ptrtofunc faddr;</span><br><span class="line">        <span class="keyword">int</span> v_offset;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>delta</strong>指this指针的offset，<strong>index</strong>指虚函数表的下标，<strong>faddr</strong>指非虚成员函数地址（当index不指向虚函数表时，设为-1），<strong>v_offset</strong>指虚基类或多重继承的第二父类的vptr位置。</p>
+<p>但是这样每次通过成员函数指针调用都会判断一次。被人诟病。</p>
+<p><strong>Microsoft</strong>引入<strong>vcall thunk</strong>，因此，<strong>faddr</strong>要么指向函数地址、要么指向<strong>vcall thunk</strong>地址，<strong>vcall thunk</strong>会自动选定虚函数表中的下标，调用。</p>
+<p>该结构体的一个副作用是，当传递一个固定值给成员函数时，可能会产生临时对象。</p>
+<h4 id="效率"><a href="#效率" class="headerlink" title="效率"></a>效率</h4><img src="images\image-20201117110854558.png" alt="image-20201117110854558" style="zoom:80%;" />
+
+<h3 id="内联函数-Inline-Function"><a href="#内联函数-Inline-Function" class="headerlink" title="内联函数(Inline Function)"></a>内联函数(Inline Function)</h3><p><strong>inline只是个请求</strong>，是否被接受，还得看编译器的是否认可inline的做法。</p>
+<p>在<strong>cfront</strong>中，有一套测试法，两个阶段：</p>
+<ul>
+<li><p>分析函数定义，决定函数的**”intrinsic inline ability”**(编译器相关的inline能力)</p>
+<p>如果函数因复杂度、建构等问题，不可成为inline，则会转化为static函数</p>
+</li>
+<li><p>真正的inline函数扩展操作，实在调用函数的那一点上。这会带来参数的求值以及临时对象。</p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new_pt.x(lhs.x() + rhs.x()); -&gt; new_pt.x = lhs.x_ + x_5PointFV(&amp;rhs);</span><br></pre></td></tr></table></figure>
+
+<p>这样扩张没有效率提升，所以不会被inline请求不会被处理。</p>
+<h4 id="形式参数"><a href="#形式参数" class="headerlink" title="形式参数"></a>形式参数</h4><ul>
+<li>inline函数的<strong>形式参数都会被实际参数取代</strong></li>
+<li>如果实际参数会导致副作用，会引入<strong>临时对象</strong></li>
+<li>如果实际参数是<strong>常量表达式</strong>，直接求值</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">Min</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    reutrn i &lt; j ? i : j;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">inline</span> <span class="keyword">int</span> bar &#123;</span><br><span class="line">	<span class="keyword">int</span> minval;</span><br><span class="line">    <span class="keyword">int</span> val1 = <span class="number">1024</span>;</span><br><span class="line">    <span class="keyword">int</span> val2 = <span class="number">2048</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 实参代替形参</span></span><br><span class="line">    minval = Min(val1, val2); -&gt; minval = val1 &lt; val2 ? val1 : val2;</span><br><span class="line">    <span class="comment">// 常量表达式，计算结果作为返回值</span></span><br><span class="line">    minval = Min(<span class="number">1024</span>, <span class="number">2048</span>); -&gt; minval = <span class="number">1024</span>;</span><br><span class="line">    <span class="comment">// 副作用，引入临时对象</span></span><br><span class="line">    minval = Min(foo(), bar() + <span class="number">1</span>); </span><br><span class="line">    -&gt; <span class="keyword">int</span> t1, t2;</span><br><span class="line">    -&gt; minval = (t1 = foo()), (t2 = Bar() + <span class="number">1</span>), r1 &lt; t2? t1 : t2;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> minval;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="局部变量"><a href="#局部变量" class="headerlink" title="局部变量"></a>局部变量</h4><p>inline函数中的局部变量会在inline函数被调用时被维护。因为这一点，如果参数有副作用，<strong>可能会导致扩展码变大</strong>。</p>
+<p>因此inline函数作为宏的安全处理，为此可能需要扩大扩展码，需要谨慎处理。</p>
 
       
 
@@ -493,16 +358,75 @@
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%85%B3%E4%BA%8E%E5%AF%B9%E8%B1%A1/">展开全文 >></a>
-        </p>
-      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://example.com/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E5%87%BD%E6%95%B0/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2020/11/17/c-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B-%E7%AC%AC%E4%B8%89%E7%AB%A0-%E6%95%B0%E6%8D%AE/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">c++对象模型--第三章-数据</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -522,99 +446,14 @@
 
 
 
-
   
-    <article id="post-目标" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">目标</a>
-    </h1>
   
 
-        
-        <a href="/2020/11/16/%E7%9B%AE%E6%A0%87/" class="archive-article-date">
-  	<time datetime="2020-11-16T10:40:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-11-16</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="小目标"><a href="#小目标" class="headerlink" title="小目标"></a>小目标</h3><ul>
-<li>整明白c++<ul>
-<li>对象（c++对象模型）</li>
-<li>并发（并发编程实战）</li>
-<li>网络io（unix网络编程、linux高性能服务器）</li>
-<li>数据库</li>
-<li>linux（私房菜）</li>
-<li>stl（stl源码）</li>
-<li>有空看看template（c++ templates 第二版还没有中文）</li>
-</ul>
-</li>
-<li>要求<ul>
-<li>造个json的轮子</li>
-<li>做个http服务器</li>
-<li>实现几个stl，allocator</li>
-</ul>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">该做的事</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2020/11/16/%E7%9B%AE%E6%A0%87/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
+  
 
   
+
   
 
 
@@ -637,8 +476,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
