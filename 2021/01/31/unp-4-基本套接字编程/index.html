@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Cytify">
+
+
+
+
+
+<title>unp_4.基本套接字编程 | Cytify</title>
+
+
+
+    <link rel="icon" href="/0.jfif">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cytify&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cytify&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">unp_4.基本套接字编程</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Cytify</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 31, 2021&nbsp;&nbsp;22:03:51</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/unp/">unp</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><p>TCP版本的网络通信如下：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115162726770.png" alt="image-20210115162726770"></p>
+<h2 id="2-socket函数"><a href="#2-socket函数" class="headerlink" title="2.socket函数"></a>2.socket函数</h2><p>网络通信的第一步就是调用<code>socket</code>函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>family</code>参数指明协议族，具体常值如下：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115161540741.png" alt="image-20210115161540741"></p>
+</li>
+<li><p><code>type</code>参数指明套接字类型，具体常值如下：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115161741043.png" alt="image-20210115161741043"></p>
+</li>
+<li><p><code>protocol</code>参数为0或者如下：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115161822371.png" alt="image-20210115161822371"></p>
+</li>
+<li><p><code>family</code>和<code>type</code>参数的组合反映了对应的协议，如下：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115162053000.png" alt="image-20210115162053000"></p>
+<p>“是”代表有效组合，但没有合适的缩略词，空白则是无效组合。</p>
+</li>
+<li><p><code>socket</code>函数成功后，返回一个小的非负整数，称为套接字描述符（socket descriptor），简称sockfd。</p>
+</li>
+</ul>
+<h2 id="3-connect函数"><a href="#3-connect函数" class="headerlink" title="3.connect函数"></a>3.connect函数</h2><p>TCP客户端使用<code>connect</code>函数建立于TCP服务器的连接。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0，出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr* servaddr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>sockfd</code>是<code>socket</code>函数创建的套接字描述符，第二、第三个参数分别是套接字地址结构指针和该结构的大小。</p>
+</li>
+<li><p>客户端在调用<code>connect</code>函数时，不必先调用<code>bind</code>，内核会确定源IP地址和选择一个临时端口。</p>
+</li>
+<li><p>TCP的<code>connect</code>函数会触发三路握手，在成功或出错后返回，出错有以下几种情况：</p>
+<ul>
+<li><p>TCP客户没有收到SYN分节响应，返回<code>ETIMEDOUT</code>错误。</p>
+</li>
+<li><p>客户的SYN响应是RST（表示复位），代表服务器在端口上没有进程与之连接，客户接收到RST，返回<code>ECONNREFUSED</code>错误。</p>
+<p>RST是TCP在发生错误时发送的一种TCP分节，产生RST的条件有：</p>
+<ul>
+<li>服务器端口上的SYN到达，但是没有对应的进程监听</li>
+<li>TCP想取消一个已有连接</li>
+<li>TCP接收到一个根本不存在的连接上的分节</li>
+</ul>
+</li>
+<li><p>客户发出的SYN在某个路由器上出现了目的地不可达的ICMP错误。在一定时间重发后，把消息作为<code>EHOSTUNREACH</code>或<code>ENETUNREACH</code>错误返回给进程。</p>
+<p>或者是以下两种情形：</p>
+<ul>
+<li>本地系统转发表没有到目的地的路径</li>
+<li><code>connect</code>调用不等待就直接返回</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-bind函数"><a href="#4-bind函数" class="headerlink" title="4.bind函数"></a>4.bind函数</h2><p><code>bind</code>函数把一个本地协议地址赋给一个套接字。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0， 出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">const</span> struct sockaddr* addr, <span class="keyword">socklen_t</span> addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>第二个参数是指向特定协议的地址结构的指针，第三个参数时该地址结构的长度。在使用时，可以仅指定其中一个，也可以都不指定</p>
+<ul>
+<li>如果未指定，内核会为套接字选择一个临时端口和自身对应的ip地址</li>
+<li>客户端未指定地址是可以理解的，除非需要使用一个预留端口</li>
+<li>服务端未指定地址，内核会把客户发送的SYN的目的IP地址作为服务器的源IP地址</li>
+</ul>
+<p>第二、第三参数的搭配结果如图：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115213310131.png" alt="image-20210115213310131"></p>
+<ul>
+<li>如果端口为0，内核在<code>bind</code>被调用时选择一个临时端口</li>
+<li>如果ip地址为通配地址，内核将等到套接字已连接(TCP)，或套接字上发出数据报报(UDP)时，选择一个本地IP地址</li>
+</ul>
+<p>对于IPv4，通配地址一般是<code>INADDR_ANY</code>，IPv6则不同</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">servaddr</span>;</span></span><br><span class="line">servaddr.sin_addr.s_addr = htonl(INADDR_ANY);</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in6</span> <span class="title">serv</span>;</span></span><br><span class="line">serv.sin6_addr = in6addr_any;</span><br></pre></td></tr></table></figure>
+
+<p><code>in6addr_any</code>会被系统定义并初始化，头文件<code>&lt;netinet/in.h&gt;</code>中有该声明</p>
+<h2 id="5-listen函数"><a href="#5-listen函数" class="headerlink" title="5.listen函数"></a>5.listen函数</h2><p><code>listen</code>函数有服务器调用时，会做两件事情。</p>
+<ul>
+<li><p>在<code>socket</code>函数创建一个套接字时，套接字被假设为主动套接字，即主动发起连接。<code>listen</code>函数把一个未连接的套接字转换为被动套接字，内核接受指向该套接字的连接请求。</p>
+<p>套接字从<code>CLOSED</code>状态切换到<code>LISTEN</code>状态。</p>
+</li>
+<li><p><code>listen</code>函数的第二个参数指定内核为套接字连接请求排队的最大连接个数</p>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0，出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">listen</span><span class="params">(<span class="keyword">int</span> sockfd, <span class="keyword">int</span> backlog)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>内核为给定的<strong>监听套接字</strong>维护两个队列：</p>
+<ul>
+<li><strong>未完成连接队列</strong>。每个SYN分解对应一项，是客户与服务器之间的TCP三次握手过程。</li>
+<li><strong>已完成连接队列</strong>。已完成TCP三次握手的客户</li>
+<li><strong>这两个队列之和不超过<code>backlog</code></strong></li>
+</ul>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115220454878.png" alt="image-20210115220454878"></p>
+<p>TCP的连接建立是完全自动的，无需服务器进程插手，下图是两个队列建立连接</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115220608847.png" alt="image-20210115220608847"></p>
+<p>客户的SYN到达服务器时，TCP在未完成队列中创建一项，接着返回给客户端，等待第三个分节到达或者该项超时。三路握手正常结束后，该项从未完成队列移动到已完成队列队尾。</p>
+<p>进程调用<code>accept</code>函数时，从已完成队列队头返回给进程，如果该队列为空，进程会被睡眠，直到TCP在已完成队列中新增一项后，唤醒该进程。</p>
+<p><strong>对于<code>backlog</code>参数，有以下几项需要注意</strong></p>
+<ul>
+<li><code>backlog</code>参数曾被规定为两个队列总和</li>
+<li><code>Berkeley</code>的实现给<code>backlog</code>增加了一个模糊因子：将<code>backlog</code>乘1.5，得到未处理队列的最大长度</li>
+<li><code>backlog</code>不要设为0，如果不希望客户连接该套接字，关闭该套接字</li>
+<li><code>backlog</code>的大小设置，一般通过环境变量或命令行来设置。如果该值比内核支持的最大值还要大，内核会将该值截断为自身能够支持的最大值。</li>
+<li>当一个客户的SYN到达时，若队列满了， 就会忽略该分节。客户端就会通过TCP重传机制来处理</li>
+<li>三路握手完成后，在服务器调用<code>accept</code>之前，到达的数据有服务器TCP排队，保存在相应已连接套接字的接受缓冲区中</li>
+</ul>
+<h2 id="6-accept函数"><a href="#6-accept函数" class="headerlink" title="6.accept函数"></a>6.accept函数</h2><p><code>accept</code>函数由TCP服务器调用，从已完成队列队头返回一个已完成连接。如果已完成队列为空，进程进入睡眠。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回非负描述符，出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">accept</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr* cliaddr, <span class="keyword">socklen_t</span>* addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>参数<code>cliaddr</code>和<code>addrlen</code>用来返回已连接的客户端的协议地址。**<code>addrlen</code>是值-结果参数**，调用时，该参数为<code>cliaddr</code>所指的套接字地址结构的长度；返回时，为内核放在套接字地址结构中的具体字节数。</p>
+<p>如果<code>accept</code>成功，<strong>返回一个由内核生成的全新套接字描述符</strong>，代表与客户的TCP连接。</p>
+<ul>
+<li><p>第一个参数称为<strong>监听套接字描述符</strong>（由<code>socket</code>函数创建，用于<code>bind</code>和<code>listen</code>函数的参数）。</p>
+</li>
+<li><p><code>accept</code>函数的返回值称为<strong>已连接套接字描述符</strong>。</p>
+</li>
+<li><p>一个服务器通常只有一个监听套接字，在服务器运行时一直存在。</p>
+<p>内核为每个已连接TCP客户端创建一个已连接套接字，在服务器服务结束后，关闭这个已连接套接字。</p>
+</li>
+</ul>
+<h2 id="7-fork和exec函数"><a href="#7-fork和exec函数" class="headerlink" title="7. fork和exec函数"></a>7. fork和exec函数</h2><h3 id="7-1-fork函数"><a href="#7-1-fork函数" class="headerlink" title="7.1 fork函数"></a>7.1 fork函数</h3><p><strong>Unix中派生新进程的唯一方法，用于并发服务器。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span>  <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 在子进程中返回0，在父进程中返回子进程ID，出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">pid_t</span> <span class="title">fork</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>fork</code>调用一次，返回两次</strong>。</p>
+<ul>
+<li>在<strong>调用进程（父进程）</strong>中返回一次，返回值是新派生进程（子进程）的进程ID</li>
+<li>在<strong>子进程</strong>中返回一次，返回值为0</li>
+<li><strong>返回值是告诉当前进程是父进程还是子进程</strong></li>
+<li>这样设置返回值的原因在于，子进程只有唯一的父进程，可以通过<code>getppid</code>获得父进程ID。而父进程无法获得各个子进程的进程ID，所以每次需要记录<code>fork</code>返回值</li>
+</ul>
+<p>父进程中，在调用<code>fork</code>打开的所有套接字描述符，在子进程中共享。通常情况下，网络服务器中父进程调用<code>accept</code>后，调用<code>fork</code>，接着子进程读写这个已连接套接字，父进程关闭这个已连接套接字。</p>
+<p><strong><code>fork</code>的典型用法如下：</strong></p>
+<ul>
+<li>一个进程创建一个自身的副本，每个副本在另一个副本执行其他任务的同时处理各自的某个操作。网络服务器的典型用法</li>
+<li>一个进程想执行另一个程序。该进程调用<code>fork</code>创建一个自身副本，其中一个副本调用<code>exec</code>将自身替换成新的程序。shell之类的程序的典型用法</li>
+</ul>
+<h3 id="7-2-exec函数"><a href="#7-2-exec函数" class="headerlink" title="7.2 exec函数"></a>7.2 exec函数</h3><p><strong>可执行程序被Unix执行的唯一方法是：有一个现有进程调用六个<code>exec</code>函数中的某一个。</strong></p>
+<p><code>exec</code>函数将当前进程映像替换为新的程序文件，新程序通常从<code>main</code>函数开始执行，进程ID不变化。我们称调用<code>exec</code>的进程为调用进程</p>
+<p>六个<code>exec</code>函数的区别在于：</p>
+<ul>
+<li>待执行的程序文件由<strong>文件名</strong>指定还是由<strong>路径</strong>指定</li>
+<li>新程序的参数一一列出还是由指针数组引用</li>
+<li>调用进程的环境传递给新程序，还是新程序指定新环境</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* arg0, ...<span class="comment">/* (char*) */</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* arg0, ...<span class="comment">/* (char*) 0, char* const envp[]*/</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* argv[], <span class="keyword">char</span>* <span class="keyword">const</span> envp[])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execlp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* arg0, ...<span class="comment">/* (char*) 0*/</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这些函数之间的关系如下：</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119213604507.png" alt="image-20210119213604507"></p>
+<p>一般来说，<code>execve</code>是内核中的系统调用，其他<code>exec</code>函数都是调用<code>execve</code>的库函数</p>
+<ul>
+<li><p>上面的三个函数，把新程序的每个参数作为独立参数，以空指针结束这些参数。</p>
+<p>下面的三个函数，有一个指针数组，指向各个参数字符串，并以空指针结尾</p>
+</li>
+<li><p>左列两个函数指定<code>filename</code>参数，函数使用当前的PATH环境变量将其转化为路径。但是如果<code>filename</code>含有左斜杠<code>/</code>，就不使用PATH环境变量。右两列四个函数以路径名作为参数</p>
+</li>
+<li><p>左两列4个函数使用外部变量<code>environ</code>的当前值，构造一个环境列表。右列2个函数指定环境列表，<code>envp</code>指针数组以空指针结束</p>
+</li>
+</ul>
+<h2 id="8-并发服务器"><a href="#8-并发服务器" class="headerlink" title="8. 并发服务器"></a>8. 并发服务器</h2><p>并发服务器的框架如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">pid_t</span> pid;</span><br><span class="line">    <span class="keyword">int</span> listenfd, connfd;</span><br><span class="line">    </span><br><span class="line">    listenfd = Socket(..);</span><br><span class="line">    Bind(listedfd, ..);</span><br><span class="line">    Listen(listenfd, LISTENQ);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> (; ;) &#123;</span><br><span class="line">        connfd = Accept(listenfd, ..);</span><br><span class="line">        <span class="keyword">if</span> ( (pid == Fork()) == <span class="number">0</span>) &#123;</span><br><span class="line">            Close(listenfd);</span><br><span class="line">            do_it(connfd);		<span class="comment">// 处理请求，传递数据</span></span><br><span class="line">            Close(connfd);</span><br><span class="line">            <span class="built_in">exit</span>(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        Close(connfd);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>为什么子进程要关闭<code>listenfd</code>?  父进程关闭<code>connfd</code></strong></p>
+<ul>
+<li>**每个文件和套接字都有一个引用计数，在文件表项中维护 (APUE P58-59)**。</li>
+<li>在<code>fork</code>之后，套接字在子进程中共享，引用计数增加1。所以，父进程关闭<code>connfd</code>和子进程关闭<code>listenfd</code>只是将引用计数从2变为1</li>
+</ul>
+<p>具体情况如图：</p>
+<ul>
+<li><p><code>accept</code>之前</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220351466.png" alt="image-20210119220351466"></p>
+</li>
+<li><p><code>accept</code>之后，<code>fork</code>之前</p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220753246.png" alt="image-20210119220753246"></p>
+</li>
+<li><p>调用<code>fork</code></p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220813318.png" alt="image-20210119220813318"></p>
+</li>
+<li><p>父进程关闭<code>connfd</code>，子进程关闭<code>listenfd</code></p>
+<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220832284.png" alt="image-20210119220832284"></p>
+</li>
+</ul>
+<h2 id="9-close函数"><a href="#9-close函数" class="headerlink" title="9. close函数"></a>9. close函数</h2><p><code>close</code>函数用于关闭套接字，终止TCP连接</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0 出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">close</span><span class="params">(<span class="keyword">int</span> sockfd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>close</code>一个TCP套接字的默认行为是把该套接字标记成已关闭，然后立即返回调用进程，之后该套接字不能被使用。</p>
+<p>然后TCP会尝试发送所有排队等待发送的数据，之后发送TCP终止序列</p>
+<p><strong>描述符引用计数</strong></p>
+<p>如果我们的确想在某个TCP套接字上发送FIN，可以调用<code>shutdown</code>函数代替<code>close</code></p>
+<h2 id="10-getsockname和getpeername函数"><a href="#10-getsockname和getpeername函数" class="headerlink" title="10. getsockname和getpeername函数"></a>10. getsockname和getpeername函数</h2><p><code>getsockname</code>返回与某个套接字关联的本地协议地址，<code>getpeername</code>返回与某个套接字关联的外地协议地址</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0 出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getsockname</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr* localaddr, <span class="keyword">socklen_t</span>* addrlen)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getpeername</span><span class="params">(<span class="keyword">int</span> sockfd, struct sockaddr* peeraddr, <span class="keyword">socklen_t</span>* addrlen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>这两个函数的后两个参数都是值-结果参数</strong></p>
+<p>这两个函数某个连接的两端的协议地址，对于IPv4和IPv6说，即IP和端口</p>
+<p>这两个函数的用处</p>
+<ul>
+<li><p>使用<code>getsockname</code>获得对应的ip地址和由内核分配的端口号</p>
+</li>
+<li><p>获得<code>accept</code>函数得到的已连接套接字的ip和端口</p>
+</li>
+<li><p>当进程调用<code>exec</code>调用服务器时，<code>getpeername</code>是唯一获得客户ip和端口的方式</p>
+<p>因为<code>exec</code>会使进程的内存映像替换为新的服务器的程序文件，原先保存对端地址的内存丢失了。但是已连接套接字是跨<code>exec</code>开放的，新服务器获取已连接套接字的方式有两种：</p>
+<ul>
+<li>先将套接字转换为字符串，通过命令行参数传递给新程序</li>
+<li>约定将某些描述符置为已连接套接字的描述符</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/c/"># c++</a>
+                    
+                        <a href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"># 网络编程</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/01/31/unp-3-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%E7%AE%80%E4%BB%8B/">unp_3.套接字编程简介</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

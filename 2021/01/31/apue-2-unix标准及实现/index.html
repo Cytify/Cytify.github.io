@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Cytify">
+
+
+
+
+
+<title>apue_2.unix标准及实现 | Cytify</title>
+
+
+
+    <link rel="icon" href="/0.jfif">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cytify&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cytify&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">apue_2.unix标准及实现</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Cytify</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 31, 2021&nbsp;&nbsp;21:54:50</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/apue/">apue</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-Unix标准与实现"><a href="#1-Unix标准与实现" class="headerlink" title="1. Unix标准与实现"></a>1. Unix标准与实现</h2><p><strong>Unix标准是不同组织对C程序的库函数设计而提出的规范</strong>，主要有以下几种：</p>
+<ul>
+<li>ISO C</li>
+<li>IEEE POSIX</li>
+<li>Single UNIX Specification</li>
+<li>FIPS</li>
+</ul>
+<p><strong>Unix实现是对上述标准的提出的接口规范的具体实现</strong>，主要有：</p>
+<ul>
+<li>SVR4</li>
+<li>4.4BSD</li>
+<li>FreeBSD</li>
+<li>Linux</li>
+<li>Mac OS X</li>
+<li>Solaris</li>
+</ul>
+<h2 id="2-限制"><a href="#2-限制" class="headerlink" title="2. 限制"></a>2. 限制</h2><p>Unix系统已经定义了很多幻数和常数。为了改善Unix程序的可移植性，有许多方法用于限制这些幻数和常数的定义，以下两种类型的限制是必须的：</p>
+<ul>
+<li>编译时限制，如：整型的最大值</li>
+<li>运行时限制，如：文件名有多少个字符</li>
+</ul>
+<p><strong>编译时限制</strong>通常包含在头文件里，程序编译时，包括这些头文件即可。</p>
+<p><strong>运行时限制</strong>则需要进程调用其他函数来确定。</p>
+<p>而限制在某些实现中是固定的，可以从头文件中静态确定。在另外的实现中是动态的，需要运行函数来确定。为了解决这类问题，有三种方法：</p>
+<ul>
+<li>编译时限制（头文件）</li>
+<li>与文件或目录无关的运行时限制（<code>sysconf</code>函数）</li>
+<li>与文件或目录有关的运行时限制（<code>pathconf</code>函数和<code>fpathconf</code>函数）</li>
+</ul>
+<h3 id="2-1-ISO-C-限制"><a href="#2-1-ISO-C-限制" class="headerlink" title="2.1 ISO C 限制"></a>2.1 ISO C 限制</h3><p>ISO C定义的所有编译时限制全部放在<code>&lt;limits.h&gt;</code>中。定义了一些类型的范围。</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210128201542281.png" alt="image-20210128201542281" style="zoom:67%;">
+
+<p><code>&lt;stdio.h&gt;</code>定义了一些 ISO C常量：</p>
+<ul>
+<li><code>FOPEN_MAX</code>，可同时打开的标准IO流的最小个数</li>
+<li><code>TMP_MAX</code>，有<code>tmpname</code>函数产生的唯一文件名的最大个数</li>
+<li><code>FILENAME_MAX</code>，避免使用，因为POSIX提供了更好的</li>
+</ul>
+<h3 id="2-2-POSIX-限制"><a href="#2-2-POSIX-限制" class="headerlink" title="2.2 POSIX 限制"></a>2.2 POSIX 限制</h3><p>POSIX的限制和常量主要分为7类：</p>
+<ul>
+<li><p>数值限制：<code>LONG_BIT</code>、<code>SSIZE_MAX</code>和<code>WORD_BIT</code></p>
+</li>
+<li><p>最小值：</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210128213643754.png" alt="image-20210128213643754" style="zoom:67%;">
+
+<p><strong>这些最小值不会随着系统而变化</strong>。POSIX.1的实现都需要提供至少这么大的值。</p>
+</li>
+<li><p>最大值：<code>_POSIX_CLOCKRES_MIN</code></p>
+</li>
+<li><p>运行时可以增加的值：<code>CHARCLASS_NAME_MAX</code> <code>COLL_WEIGHTS_MAX</code> <code>LINE_MAX</code> <code>NGROUPS_MAX</code> <code>RE_DUP_MAX</code></p>
+</li>
+<li><p>运行时不变值（可能不确定）：</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210128213913997.png" alt="image-20210128213913997" style="zoom:67%;">
+</li>
+<li><p>其他不变值：<code>NL_ARGMAX</code> <code>NL_MSGMAX</code> <code>NL_SETMAX</code> <code>NL_TEXTMAX</code></p>
+</li>
+<li><p>路径可变值：<code>FILESIZEBITS</code> <code>LINK_MAX</code> <code>MAX_CANON</code> <code>MAX_INPUT</code> <code>NAME_MAX</code> <code>PATH_MAX</code> <code>PIPE_BUF</code> <code>SYMLINK_MAX</code></p>
+</li>
+</ul>
+<h3 id="2-3-XSI-限制"><a href="#2-3-XSI-限制" class="headerlink" title="2.3 XSI 限制"></a>2.3 XSI 限制</h3><ul>
+<li><p>最小值：</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210128214532787.png" alt="image-20210128214532787" style="zoom:67%;">
+</li>
+<li><p>运行时不变值（可能不确定）：<code>IOV_MAX</code> <code>PAGE_SIZE</code></p>
+</li>
+</ul>
+<h3 id="2-4-函数-sysconf、pathconf和fpathconf"><a href="#2-4-函数-sysconf、pathconf和fpathconf" class="headerlink" title="2.4 函数 sysconf、pathconf和fpathconf"></a>2.4 函数 sysconf、pathconf和fpathconf</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line"></span><br><span class="line">long sysconf(int name);</span><br><span class="line"></span><br><span class="line">long pathconf(const char *pathname, int name);</span><br><span class="line"></span><br><span class="line">long fpathconf(int fd, int name);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>三个函数的<code>name</code>参数都用来标识系统限制，但是种类有所不同</p>
+<ul>
+<li><p><code>sysconf</code>的<code>name</code>参数以<code>_SC_</code>开头</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210130101620670.png" alt="image-20210130101620670" style="zoom:67%;">
+</li>
+<li><p><code>pathconf</code>和<code>fpathconf</code>的<code>name</code>参数以<code>_PC_</code>开头</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210130101703862.png" alt="image-20210130101703862" style="zoom:67%;">
+</li>
+</ul>
+</li>
+<li><p>三个函数的返回值情况如下</p>
+<ul>
+<li>如果<code>name</code>参数不是一个合适的常量，三个函数都返回-1，并将<code>errno</code>置为<code>EINVAL</code> </li>
+<li>部分<code>name</code>参数会返回一个变量值(&gt;= 0)，或提示该值是不确定的。不确定通过返回-1标识，但是不改变<code>errno</code></li>
+<li><code>_SC_CLK_TCK</code>的返回值是每秒的时钟滴答数，用于<code>times</code>函数的返回值</li>
+</ul>
+</li>
+<li><p><strong>对于<code>pathconf</code>的参数<code>pathname</code>和<code>fpathconf</code>的参数<code>fd</code>来说，有很多限制。其中一条不满足，产生未定义的结果</strong></p>
+<ul>
+<li><code>_PC_MAX_CANON</code>和<code>_PC_MAX_INPUT</code>引用的文件必须是终端文件</li>
+<li><code>_PC_LINK_MAX</code>和<code>_PC_TIMESTAMP_RESOLUTION</code>引用的文件可以是文件或目录。如果是目录，返回值仅仅用于目录，不涉及目录内的文件</li>
+<li><code>_PC_FILESIZEBITS</code>和<code>_PC_NAME_MAX</code>引用的文件必须是目录，返回值用于该目录内的文件名</li>
+<li><code>_PC_PATH_MAX</code>引用的文件必须是目录。当引用的是工作目录时，返回为相对路径的最大字节名</li>
+<li><code>_PC_PIPE_BUF</code>引用的文件必须是管道、FIFO或目录。<ul>
+<li>管道或FIFO，返回值是引用的管道或FIFO的限制</li>
+<li>目录，返回值是在该目录中创建任一FIFO的限制值</li>
+</ul>
+</li>
+<li><code>_PC_SYNLINK_MAX</code>引用的文件必须是目录。返回值用于该目录中符号链接可包含的字符串最大值</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-5-不确定的运行时限制"><a href="#2-5-不确定的运行时限制" class="headerlink" title="2.5 不确定的运行时限制"></a>2.5 不确定的运行时限制</h3><p>运行时限制一般是不确定的，在使用时需要动态获取这些信息，通常使用上述三个函数之一来获取。</p>
+<h2 id="3-功能测试宏"><a href="#3-功能测试宏" class="headerlink" title="3. 功能测试宏"></a>3. 功能测试宏</h2><p>头文件定义了很多符号，大多数实现也添加了自己的符号。<strong>但是如果只希望使用POSIX的符号，且不与任何实现的定义起冲突，需要定义常量<code>_POSIX_C_SOURCE</code>。</strong></p>
+<p>该常量称为功能测试宏，所有的功能测试宏都以下划线开头。使用时，格式如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cc -D_POSIX_C_SOURCE&#x3D;200809L file.c</span><br><span class="line">&#x2F;&#x2F; 也可在头文件第一行加上</span><br><span class="line">#define _POSIX_C_SOURCE 200809L</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-基本系统数据类型"><a href="#4-基本系统数据类型" class="headerlink" title="4. 基本系统数据类型"></a>4. 基本系统数据类型</h2><p><code>&lt;sys/types.h&gt;</code>中定义了一些基本系统数据类型，绝大多数以<code>_t</code>结尾。</p>
+<img src="/2021/01/31/apue-2-unix%E6%A0%87%E5%87%86%E5%8F%8A%E5%AE%9E%E7%8E%B0/image-20210130112505420.png" alt="image-20210130112505420" style="zoom:67%;">
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/unix/"># unix</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/01/31/unp-3-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%E7%AE%80%E4%BB%8B/">unp_3.套接字编程简介</a>
+            
+            
+            <a class="next" rel="next" href="/2021/01/31/apue-1-unix%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">apue_1.unix基础知识</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
