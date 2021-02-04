@@ -195,22 +195,24 @@
 
         <div class="post-content">
             <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1.概述"></a>1.概述</h2><p>TCP版本的网络通信如下：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115162726770.png" alt="image-20210115162726770"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115162726770.png">
+
 <h2 id="2-socket函数"><a href="#2-socket函数" class="headerlink" title="2.socket函数"></a>2.socket函数</h2><p>网络通信的第一步就是调用<code>socket</code>函数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">socket</span><span class="params">(<span class="keyword">int</span> family, <span class="keyword">int</span> type, <span class="keyword">int</span> protocol)</span></span>;</span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p><code>family</code>参数指明协议族，具体常值如下：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115161540741.png" alt="image-20210115161540741"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115161540741.png">
 </li>
 <li><p><code>type</code>参数指明套接字类型，具体常值如下：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115161741043.png" alt="image-20210115161741043"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115161741043.png" alt="image-20210115161741043">
 </li>
 <li><p><code>protocol</code>参数为0或者如下：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115161822371.png" alt="image-20210115161822371"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115161822371.png" alt="image-20210115161822371">
 </li>
 <li><p><code>family</code>和<code>type</code>参数的组合反映了对应的协议，如下：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115162053000.png" alt="image-20210115162053000"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115162053000.png" alt="image-20210115162053000">
+
 <p>“是”代表有效组合，但没有合适的缩略词，空白则是无效组合。</p>
 </li>
 <li><p><code>socket</code>函数成功后，返回一个小的非负整数，称为套接字描述符（socket descriptor），简称sockfd。</p>
@@ -256,7 +258,8 @@
 <li>服务端未指定地址，内核会把客户发送的SYN的目的IP地址作为服务器的源IP地址</li>
 </ul>
 <p>第二、第三参数的搭配结果如图：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115213310131.png" alt="image-20210115213310131"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115213310131.png" alt="image-20210115213310131">
+
 <ul>
 <li>如果端口为0，内核在<code>bind</code>被调用时选择一个临时端口</li>
 <li>如果ip地址为通配地址，内核将等到套接字已连接(TCP)，或套接字上发出数据报报(UDP)时，选择一个本地IP地址</li>
@@ -281,9 +284,11 @@
 <li><strong>已完成连接队列</strong>。已完成TCP三次握手的客户</li>
 <li><strong>这两个队列之和不超过<code>backlog</code></strong></li>
 </ul>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115220454878.png" alt="image-20210115220454878"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115220454878.png" alt="image-20210115220454878">
+
 <p>TCP的连接建立是完全自动的，无需服务器进程插手，下图是两个队列建立连接</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210115220608847.png" alt="image-20210115220608847"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210115220608847.png" alt="image-20210115220608847">
+
 <p>客户的SYN到达服务器时，TCP在未完成队列中创建一项，接着返回给客户端，等待第三个分节到达或者该项超时。三路握手正常结束后，该项从未完成队列移动到已完成队列队尾。</p>
 <p>进程调用<code>accept</code>函数时，从已完成队列队头返回给进程，如果该队列为空，进程会被睡眠，直到TCP在已完成队列中新增一项后，唤醒该进程。</p>
 <p><strong>对于<code>backlog</code>参数，有以下几项需要注意</strong></p>
@@ -336,7 +341,8 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execl</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* arg0, ...<span class="comment">/* (char*) */</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* arg0, ...<span class="comment">/* (char*) 0, char* const envp[]*/</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execve</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* argv[], <span class="keyword">char</span>* <span class="keyword">const</span> envp[])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execlp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* arg0, ...<span class="comment">/* (char*) 0*/</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">execvp</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> <span class="keyword">char</span>* argv[])</span></span>;</span><br></pre></td></tr></table></figure>
 
 <p>这些函数之间的关系如下：</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119213604507.png" alt="image-20210119213604507"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210119213604507.png" alt="image-20210119213604507">
+
 <p>一般来说，<code>execve</code>是内核中的系统调用，其他<code>exec</code>函数都是调用<code>execve</code>的库函数</p>
 <ul>
 <li><p>上面的三个函数，把新程序的每个参数作为独立参数，以空指针结束这些参数。</p>
@@ -358,16 +364,17 @@
 <p>具体情况如图：</p>
 <ul>
 <li><p><code>accept</code>之前</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220351466.png" alt="image-20210119220351466"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210119220351466.png" alt="image-20210119220351466">
 </li>
 <li><p><code>accept</code>之后，<code>fork</code>之前</p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220753246.png" alt="image-20210119220753246"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210119220753246.png" alt="image-20210119220753246">
 </li>
 <li><p>调用<code>fork</code></p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220813318.png" alt="image-20210119220813318"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210119220813318.png" alt="image-20210119220813318">
 </li>
 <li><p>父进程关闭<code>connfd</code>，子进程关闭<code>listenfd</code></p>
-<p><img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%5Cimage-20210119220832284.png" alt="image-20210119220832284"></p>
+<img src="/2021/01/31/unp-4-%E5%9F%BA%E6%9C%AC%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B/image-20210119220832284.png" alt="image-20210119220832284">
+
 </li>
 </ul>
 <h2 id="9-close函数"><a href="#9-close函数" class="headerlink" title="9. close函数"></a>9. close函数</h2><p><code>close</code>函数用于关闭套接字，终止TCP连接</p>
@@ -428,6 +435,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/02/04/apue-3-%E6%96%87%E4%BB%B6IO/">apue-3.文件IO</a>
             
             
             <a class="next" rel="next" href="/2021/01/31/unp-3-%E5%A5%97%E6%8E%A5%E5%AD%97%E7%BC%96%E7%A8%8B%E7%AE%80%E4%BB%8B/">unp_3.套接字编程简介</a>
