@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Cytify">
+
+
+
+
+
+<title>apue_4_文件和目录 | Cytify</title>
+
+
+
+    <link rel="icon" href="/0.jfif">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cytify&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cytify&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">apue_4_文件和目录</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Cytify</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 5, 2021&nbsp;&nbsp;16:37:52</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/apue/">apue</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-stat、fstat、fstatat-和-lstat-函数"><a href="#1-stat、fstat、fstatat-和-lstat-函数" class="headerlink" title="1. stat、fstat、fstatat 和 lstat 函数"></a>1. stat、fstat、fstatat 和 lstat 函数</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 4个函数返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">stat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> pathname, struct stat *<span class="keyword">restrict</span> buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstat</span><span class="params">(<span class="keyword">int</span> fd, struct stat *buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lstat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> pathname, struct stat *<span class="keyword">restrict</span> buf)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fstatat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *<span class="keyword">restrict</span> pathname, struct stat *<span class="keyword">restrict</span> buf, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>stat</code>函数，返回与<code>pathname</code>对应文件的信息</p>
+</li>
+<li><p><code>fstat</code>函数，返回文件描述符<code>fd</code>上打开文件的信息</p>
+</li>
+<li><p><code>lstat</code>函数，功能类似<code>stat</code>函数，<strong>但是当文件是符号链接时，函数返回该符号链接的信息，而不是符号链接引用的文件的信息</strong></p>
+</li>
+<li><p><code>fstatat</code>函数，相对于当前打开目录（有<code>fd</code>指定）的路径名，返回对应文件的信息。</p>
+<p><strong><code>flag</code>参数控制着是否跟随一个符号链接。</strong><code>AT_SYMLINK_NOFOLLOW</code>被设置时，<code>fstatat</code>函数返回符号链接的信息，而不是跟随符号链接</p>
+<p><code>fd</code>参数值是<code>AT_FDCWD</code>时，<code>pathname</code>是一个相对路径时，<code>fstatat</code>会计算相对于当前目录的<code>pathname</code>参数。如果<code>pathname</code>是一个绝对路径，<code>fd</code>参数会被忽略。</p>
+</li>
+<li><p><code>buf</code>参数有函数来填充该结构体的信息，该结构体的基本形式如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">stat</span> &#123;</span></span><br><span class="line">	<span class="keyword">mode_t</span> st_mode;				<span class="comment">// 文件类型 权限</span></span><br><span class="line">    <span class="keyword">ino_t</span> st ino;				<span class="comment">// i-node数字 序列数字</span></span><br><span class="line">    <span class="keyword">dev_t</span> st_dev;				<span class="comment">// 设备号 相对于文件系统</span></span><br><span class="line">    <span class="keyword">dev_t</span> st_rdev;				<span class="comment">// 特殊文件的设备号</span></span><br><span class="line">    <span class="keyword">nlink_t</span> st_nlink;			<span class="comment">// 链接数</span></span><br><span class="line">    <span class="keyword">uid_t</span> st_uid;				<span class="comment">// 所有者的用户id</span></span><br><span class="line">    <span class="keyword">gid_t</span> st_gid;				<span class="comment">// 所有者的组id</span></span><br><span class="line">    <span class="keyword">off_t</span> st_size;				<span class="comment">// 常规文件大小字节数</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">st_atime</span>;</span>	 <span class="comment">// 上次访问的时间</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">st_mtime</span>;</span>	 <span class="comment">// 上次修改的时间</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> <span class="title">st_ctime</span>;</span>	 <span class="comment">// 上次文件状态修改的时间</span></span><br><span class="line">    <span class="keyword">blksize_t</span> st_blksize;		<span class="comment">// 最佳的io块大小</span></span><br><span class="line">    <span class="keyword">blkcnt_t</span> st_blocks;			<span class="comment">// 分配的磁盘块数目</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p><code>timespec</code>按照秒和纳秒定义了时间，至少包含以下两个时间段：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timespec</span> &#123;</span></span><br><span class="line">	<span class="keyword">time_t</span> tv_sec;</span><br><span class="line">    <span class="keyword">long</span> tv_nsec;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="2-文件类型"><a href="#2-文件类型" class="headerlink" title="2. 文件类型"></a>2. 文件类型</h2><p>文件类型包括以下几种：</p>
+<ul>
+<li><p>普通文件。最常用的文件类型，包含了某种数据，这种数据是文本的还是二进制的对于Unix内核来说没有区别。</p>
+<p><strong><em>例外是二进制可执行文件，为了执行程序，内核必须理解其格式。所有二进制可执行文件都遵循一种格式，使得内核可以确定程序文本和数据的加载位置</em></strong></p>
+</li>
+<li><p>目录文件。包含了其他文件的名字和指向这些文件信息的指针。对一个目录具有读权限的任一进程都可以读该目录内容，但是只有内核可以直接写目录文件。</p>
+</li>
+<li><p>块特殊文件。提供对设备（如磁带）带缓冲的访问，每次访问以固定长度为单位进行。</p>
+</li>
+<li><p>字符特殊文件。提供对设备不带缓冲的访问，每次访问长度可变。系统中的设备要么是块特殊文件，要么是字符特殊文件。</p>
+</li>
+<li><p>FIFO。用于进程间网络通信，有时也叫命名管道。</p>
+</li>
+<li><p>套接字。用于网络通信</p>
+</li>
+<li><p>符号链接。指向另外一个文件</p>
+</li>
+</ul>
+<p><strong>文件类型的信息包含在<code>stat</code>结构中的<code>st_mode</code>中</strong>，可以使用下表中的宏确定文件类型，这些宏的参数是<code>st_mode</code>。</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210208113622639.png" alt="image-20210208113622639" style="zoom:65%;">
+
+<p>POSIX.1允许将进程间通信（IPC）的对象（消息队列和信号量）说明为文件。下图中的宏可用于将<code>stat</code>结构中确定IPC对象类型，这些宏的参数是指向<code>stat</code>结构的指针</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210208113922813.png" alt="image-20210208113922813" style="zoom:65%;">
+
+<h2 id="3-设置用户ID和组ID"><a href="#3-设置用户ID和组ID" class="headerlink" title="3. 设置用户ID和组ID"></a>3. 设置用户ID和组ID</h2><p>与一个进程相关的ID有6个或更多，如图：</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210209131726322.png" alt="image-20210209131726322" style="zoom:65%;">
+
+<ul>
+<li>实际用户ID和实际组ID，标识出我们是谁，这两个字段从登陆时的口令文件中登录项获得。通常，一个会话期中这些值不变。但是超级用户进程有办法改变他们。</li>
+<li>有效用户ID、有效组ID和附属组ID，决定了文件的访问权限。</li>
+<li>保存的设置用户ID和保存的设置组ID，在执行程序时，保存了有效用户ID和有效组ID的副本。</li>
+</ul>
+<p>每个文件都有一个所有者和组所有者，分别由<code>stat</code>结构中的<code>st_uid</code>和<code>st_gid</code>指定。</p>
+<p><strong>通常，有效用户ID等于实际用户ID，有效组ID等于实际组ID</strong>。但是可以通过<code>st_mode</code>中设置特殊位，使得在执行此文件时，将进程的有效用户ID和有效组ID分别设置为文件的所有者的用户ID和组ID。这两个位称为设置用户ID位和设置组ID位。<br>这两位可以通过常量<code>S_ISUID</code>和<code>S_ISGID</code>测试。</p>
+<h2 id="4-文件访问权限"><a href="#4-文件访问权限" class="headerlink" title="4. 文件访问权限"></a>4. 文件访问权限</h2><p>每个文件类型都有9个访问权限位，可以将它们分为三类，如下：</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210209200200728.png" alt="image-20210209200200728" style="zoom:65%;">
+
+<p><code>chmod</code>命令用于修改这9个权限位。其中u表示用户（所有者），g表示组，o表示其他。</p>
+<p><strong>图4-6的三类访问权限由不同的方式、不同的函数使用。规则如下：</strong></p>
+<ul>
+<li><p>打开任一类型的文件时，<strong>对该文件路径中的每一个目录，包括他可能隐含的目录，都需要具有执行权限</strong></p>
+<p><strong>目录的读权限和执行权限是不同的</strong>。读权限允许我们读取目录，获得目录中所有文件名。执行权限允许我们通过该目录，即搜索该目录，寻找一个特定的文件名</p>
+</li>
+<li><p>一个文件的读权限决定了我们能否打开文件进行读操作。这与<code>open</code>函数的<code>O_RDONLY</code>和<code>O_RDWD</code>标志有关</p>
+</li>
+<li><p>一个文件的写权限决定了我们能否打开文件进行写操作。这与<code>write</code>函数的<code>O_WRONLY</code>和<code>O_RDWD</code>标志有关</p>
+</li>
+<li><p><code>open</code>函数对文件指定<code>O_TRUNC</code>标志，必须对该文件具有写权限</p>
+</li>
+<li><p>在目录中新建文件，必须对该目录具有写权限和执行权限</p>
+</li>
+<li><p>在目录中删除文件，必须对该目录具有写权限和执行权限，对文件本身不需要读、写权限</p>
+</li>
+<li><p>若使用<code>exec</code>函数执行文件，必须对该文件具有执行权限，且该文件必须是普通文件</p>
+</li>
+</ul>
+<p><strong>进程每次打开、创建、删除文件时，内核进行文件权限测试。</strong>这种测试可能涉及到文件所有者（<code>st_uid</code>和<code>st_gid</code>）、进程的有效ID（有效用户ID和有效组ID）以及进程的附属组ID（如果支持）。</p>
+<p>两个所有者ID是文件的性质，两个有效ID和附属组ID是进程的性质，内核进行的测试如下：</p>
+<ul>
+<li><p>如果进程的有效用户ID是0（超级用户），允许访问</p>
+</li>
+<li><p>如果进程的有效ID等于文件的所有者ID，如果所有者适当的访问权限被设置，则允许访问，否则拒绝访问</p>
+<p>适当的访问权限为，如果进程读文件，则用户读位为1，写文件和执行文件同理</p>
+</li>
+<li><p>如果进程的有效组ID或附属组ID等于文件的组ID，如果组适当的访问权限被设置，则允许访问，否则拒绝访问</p>
+</li>
+<li><p>如果其他用户适当的访问权限被设置，则允许访问，否则拒绝访问</p>
+</li>
+</ul>
+<p>内核按照顺序方式进行如上四个步骤</p>
+<h2 id="5-新文件和目录的所有权"><a href="#5-新文件和目录的所有权" class="headerlink" title="5. 新文件和目录的所有权"></a>5. 新文件和目录的所有权</h2><p>在创建一个文件和目录时，调用<code>open create mkdir</code>。<strong>新文件的用户ID设置为进程的用户ID</strong>。组ID的设置有以下两个选择：</p>
+<ul>
+<li>新文件的组ID是进程的有效组ID</li>
+<li>新文件的组ID是他所在目录的组ID</li>
+</ul>
+<h2 id="6-access-和-faccessat-函数"><a href="#6-access-和-faccessat-函数" class="headerlink" title="6. access 和 faccessat 函数"></a>6. access 和 faccessat 函数</h2><p>如果进程以实际用户ID和实际组ID测试对文件的访问权限时，需要调用<code>access</code>和<code>faccessat</code>函数，该函数同样分成四个步骤测试文件的访问权限，与内核的测试步骤相同。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">access</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> mode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">faccessat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> mode, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果测试文件是否存在，<code>mode</code>需要设置为<code>F_OK</code>，否则<code>mode</code>的值如下：</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210211172641778.png" alt="image-20210211172641778" style="zoom:65%;">
+</li>
+<li><p><code>faccessat</code>函数与<code>access</code>函数在以下情况是相同的：</p>
+<ul>
+<li><code>pathname</code>是绝对路径</li>
+<li><code>fd</code>参数是<code>AT_FDCWD</code>，<code>pathname</code>是相对路径</li>
+</ul>
+<p>除此之外，<code>faccessat</code>函数计算相对于打开目录，（由<code>fd</code>指定）的<code>pathname</code>。</p>
+</li>
+<li><p><code>flag</code>参数用于改变<code>faccessat</code>函数的行为。如果<code>flag</code>设置为<code>AT_EACCESS</code>，使用调用进程的有效用户ID和有效组ID进行访问检查，而不是实际用户ID和实际组ID</p>
+</li>
+</ul>
+<h2 id="7-umask函数"><a href="#7-umask函数" class="headerlink" title="7. umask函数"></a>7. umask函数</h2><p><code>umask</code>函数为进程设置文件模式创建屏蔽字，并返回之前的值，<strong>且没有出错返回</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 之前的文件模式创建屏蔽字</span></span><br><span class="line"><span class="function"><span class="keyword">mode_t</span> <span class="title">umask</span><span class="params">(<span class="keyword">mode_t</span> cmask)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>cmask</code>参数是由9个不同的文件访问权限常量，按位或构成的</li>
+<li>文件模式创建屏蔽字中为1的位，在文件模式中相应的位一定被关闭</li>
+</ul>
+<p>更改进程的屏蔽字不会影响父进程的屏蔽字</p>
+<p>常见的umask值有：</p>
+<ul>
+<li>002，阻止其他用户写入文件</li>
+<li>022，阻止同组成员和其他用户写入文件</li>
+<li>027，阻止同组成员写入文件以及其他用户读、写或执行你的文件</li>
+</ul>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210211193943834.png" alt="image-20210211193943834" style="zoom:65%;">
+
+<h2 id="8-chmod、fchmod-和-fchmodat-函数"><a href="#8-chmod、fchmod-和-fchmodat-函数" class="headerlink" title="8. chmod、fchmod 和 fchmodat 函数"></a>8. chmod、fchmod 和 fchmodat 函数</h2><p>这三个函数可以更改现有文件的访问权限</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">chmod</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">mode_t</span> mode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fchmod</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">mode_t</span> mode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fchmodat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">mode_t</span> mode, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>chmod</code>函数在指定的文件上操作</p>
+</li>
+<li><p><code>fchmod</code>函数对已打开的文件操作</p>
+</li>
+<li><p><code>fchmodat</code>函数与<code>chmod</code>在以下情况是相同的：</p>
+<ul>
+<li><code>pathname</code>是绝对路径</li>
+<li><code>fd</code>参数值为<code>AF_FDCWD</code>，<code>pathname</code>位相对路径</li>
+</ul>
+<p>否则，<code>fchmodname</code>计算相对于打开目录，（由<code>fd</code>指定）的<code>pathname</code>。</p>
+<p><code>flag</code>参数可以用于更改<code>fchmodat</code>函数的行为，当<code>flag</code>为<code>AT_SYMLINK_NOFOLLOW</code>标志时，<code>fchmodat</code>函数不会跟随符号链接</p>
+</li>
+<li><p><code>mode</code>参数是如下常量的按位或:</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210211222342088.png" alt="image-20210211222342088" style="zoom:65%;">
+
+</li>
+</ul>
+<p><strong>为了改变一个文件的权限，进程的有效ID必须等于用户的所有者ID，或者进程拥有超级用户权限</strong></p>
+<p><code>chmod</code>函数在下列条件下自动清除两个权限位：</p>
+<ul>
+<li>Solaris等系统的普通文件，如果我们设置他们的粘着位，且没有超级用户权限，那么<code>mode</code>中的粘着位会被自动关闭</li>
+<li>新创建的文件组ID可能不是调用进程所属的组。文件组ID可能是父目录的组ID，如果新文件的组ID不等于进程的有效组ID或附属组ID，且进程没有超级用户权限，那么文件的设置组ID为会被自动关闭</li>
+</ul>
+<h2 id="9-粘着位"><a href="#9-粘着位" class="headerlink" title="9. 粘着位"></a>9. 粘着位</h2><p>粘着位即<code>S_ISVTX</code>位。如果一个可执行文件设置了粘着位，在程序第一次执行终止后，程序正文部分的副本被放入交换区，使得下次执行该程序时可以快速将其放入内存中。</p>
+<p>因为早期Unix文件系统可能是随机放的，所以对于常用的应用，交换区的存在可以帮助他们快速载入内存。所以称为保存正文位(saved-text bit)，而现在的Unix大多是虚拟存储系统和快速文件系统，所以不需要这种技术了。</p>
+<p>如今的系统也扩展了粘着位的适用范围，可以对目录使用粘着位。</p>
+<p>如果对目录使用了粘着位，只有对该目录具有写权限的用户且满足下列条件之一，才能删除或重命名该目录下的文件：</p>
+<ul>
+<li>拥有此文件</li>
+<li>拥有此目录</li>
+<li>是超级用户</li>
+</ul>
+<h2 id="10-chown、fchown、fchownat-和-lchown-函数"><a href="#10-chown、fchown、fchownat-和-lchown-函数" class="headerlink" title="10. chown、fchown、fchownat 和 lchown 函数"></a>10. chown、fchown、fchownat 和 lchown 函数</h2><p>这些函数用于更改文件的用户ID和组ID。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">chown</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">uid_t</span> owner, <span class="keyword">gid_t</span> group)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fchown</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">uid_t</span> owner, <span class="keyword">gid_t</span> group)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fchownat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">uid_t</span> owner, <span class="keyword">gid_t</span> group, <span class="keyword">int</span> flag)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">lchown</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">uid_t</span> owner, <span class="keyword">gid_t</span> group)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>如果<code>owner</code>或<code>group</code>的值为-1，则对应的用户ID或组ID不变</p>
+</li>
+<li><p><code>lchown和在设置了``AT_SYMLINK_NOFOLLOW</code>标志<code>fchownat</code>函数后，更改符号链接自身的用户ID或组ID</p>
+</li>
+<li><p><code>fchown</code>更改由<code>fd</code>参数指出的已打开文件的所有者，所以他不能更改符号链接自身的所有者，因为已经打开了文件</p>
+</li>
+<li><p><code>fchownat</code>与<code>chown</code>或<code>lchown</code>在以下两种情况是相同的：</p>
+<ul>
+<li><code>fchownat</code>函数的<code>pathname</code>参数是绝对路径</li>
+<li><code>fd</code>参数值为<code>AT_FDCWD</code>且<code>pathname</code>是相对路径</li>
+</ul>
+<p>除此之外，如果<code>flag</code>设置了<code>AT_SYMLINK_NOFOLLOW</code>标志，<code>fchownat</code>与<code>chown</code>行为相同；反之，与<code>lchown</code>行为相同</p>
+<p>如果<code>fchownat</code>的<code>fd</code>参数为打开目录的文件描述符，且<code>pathname</code>是相对路径，那么<code>fchownat</code>计算相对于打开目录的<code>pathname</code></p>
+</li>
+</ul>
+<p>POSIX.1中规定了常量<code>_POSIX_CHOWN_RESTRICTED</code>，可以使用<code>pathconf</code>或<code>fpathconf</code>查询。此选项还与所引用的文件有关。</p>
+<p>若<code>_POSIX_CHOWN_RESTRICTED</code>对指定的文件生效，</p>
+<ul>
+<li>只有超级用户进程可以修改该文件的用户ID</li>
+<li>如果进程拥有此文件，即文件的用户ID等于进程的有效用户ID，参数<code>owner</code>等于-1或文件用户ID，且参数<code>group</code>等于进程的有效组ID或附属组ID，那么该进程可以修改该文加你的组ID</li>
+</ul>
+<h2 id="11-文件长度"><a href="#11-文件长度" class="headerlink" title="11. 文件长度"></a>11. 文件长度</h2><p><code>stat</code>结构成员<code>st_size</code>表示以字节为单位的文件长度，但此字段只对普通文件、目录文件和符号链接有意义。</p>
+<ul>
+<li>普通文件，长度可以为0，在读这种文件时，会直接读到一个EOF</li>
+<li>目录文件的长度通常是一个数的整数倍</li>
+<li>符号链接的长度是所指的文件名的实际字节数，不包括结尾的NULL</li>
+</ul>
+<p><strong>文件空洞</strong></p>
+<p><strong>文件空洞是因为设置的偏移量超过了文件长度，并写入数据造成的</strong>。</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/1.png" alt="1" style="zoom:80%;">
+
+<p>我们可以看到，file.hole文件大概有1.6M，通过du命令，我们发现实际使用的磁盘空间是8个块。</p>
+<p>du命令是在Linux上的块数单位取决于环境变量<code>POSIXLY_CORRECT</code>。设置该环境变量时，单位为1024字节，否则时512字节</p>
+<p>正常的文件IO读取的是整个文件的长度</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/2.png" alt="2" style="zoom:80%;">
+
+<p>复制文件时，这些空洞都会被填满，所有实际数据字节会被填充为0</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/3.png" alt="3" style="zoom:80%;">
+
+<p>同时，实际计算出的字节数（20*单位）可能略大于ls命令的长度。因为文件系统使用了一些指向实际数据块的指针</p>
+<h2 id="12-文件截断"><a href="#12-文件截断" class="headerlink" title="12. 文件截断"></a>12. 文件截断</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">truncate</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">off_t</span> length)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">ftruncate</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">off_t</span> length)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数将文件长度截断为<code>length</code>，如果<code>length</code>小于实际文件长度，那么超过<code>length</code>的数据无法访问。如果<code>length</code>大于实际文件长度，文件长度将增加 ，之间的数据会被读作0，即创建了一个空洞。</p>
+<h2 id="13-文件系统"><a href="#13-文件系统" class="headerlink" title="13. 文件系统"></a>13. 文件系统</h2><p>我们可以把一个磁盘分成多个分区，每个分区域可以包含一个文件系统。其中，i节点是固定长度的记录项，包含了文件的大部分信息。</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217100100359.png" alt="image-20210217100100359" style="zoom:65%;">
+
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217100310573.png" alt="image-20210217100310573" style="zoom:65%;">
+
+<ul>
+<li>两个目录快指向了一个i节点。每个i节点内有一个链接计数，值为指向该i节点的目录项的个数。只有在链接为0时，才可删除该文件，释放数据块。在<code>stat</code>结构中，<code>st_nlink</code>是链接计数，<strong>这种链接称为硬链接</strong>。</li>
+<li>另一种链接是<strong>符号链接</strong>。符号链接文件的实际内容，即数据块中的数据，包含了指向的文件名字。</li>
+<li>i节点包含文件有关的所有信息。<code>stat</code>结构的大多数信息取自i节点。只有文件名和i节点编号存放在目录项中。i节点编号类型为<code>ino_t</code></li>
+<li>目录项中的i节点编号指向同一文件系统中对应的i节点，不能指向另外一个文件系统的i节点</li>
+<li>在不更换文件系统的情况下，对文件重命名时，只需构造一个指向现有i节点的目录项，删除老的目录项。</li>
+</ul>
+<p><strong>目录文件的链接计数</strong></p>
+<p>假设我们创建一个空目录<code>testdir</code>，文件系统如下所示：</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217101906424.png" alt="image-20210217101906424" style="zoom:65%;">
+
+<p>第一个目录块是<code>testdir</code>的，第二个是当前目录的。</p>
+<p>我们可以看出，2549的i节点链接计数是2，分别是<code>testdir</code>的<code>.</code>项和当前工作目录的<code>testdir</code>项</p>
+<p>1267的i节点链接计数是3，分别是<code>testdir</code>的<code>..</code>项，当前工作目录的<code>.</code>项和其父目录中的目录项</p>
+<p><strong>所有叶目录，即没有子目录的目录，其链接计数都是2</strong></p>
+<h2 id="14-link、linkat、unlink、unlinkat-和-remove-函数"><a href="#14-link、linkat、unlink、unlinkat-和-remove-函数" class="headerlink" title="14. link、linkat、unlink、unlinkat 和 remove 函数"></a>14. link、linkat、unlink、unlinkat 和 remove 函数</h2><p><strong>任何文件可以有多个目录项指向其i节点，创建一个指向现有文件的链接的函数为<code>link</code>和<code>linkat</code>。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">link</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *existingpath, <span class="keyword">const</span> <span class="keyword">char</span> *newpath)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">linkat</span><span class="params">(<span class="keyword">int</span> efd, <span class="keyword">const</span> <span class="keyword">char</span> *existingpath, <span class="keyword">int</span> nfd, <span class="keyword">const</span> <span class="keyword">char</span> *newpath, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数创建一个新目录项<code>newpath</code>，引用现有文件<code>existingpath</code>。如果<code>newpath</code>存在，函数出错。<strong>之创建<code>newpath</code>中最后一个分量，路径的其他部分应该已经存在。</strong></p>
+<p><code>linkat</code>函数，现有文件通过<code>efd</code>和<code>existingpath</code>确定，新文件通过<code>nfd</code>和<code>newpath</code>确定。</p>
+<ul>
+<li>如果两个路径名中存在相对路径，那么需要通过文件描述符计算</li>
+<li>如果两个文件描述符有一个是<code>AT_FDCWD</code>，路径会通过当前目录激素那</li>
+<li>如果两个路径有一个是绝对路径，文件描述符会被忽略</li>
+</ul>
+<p>如果现有文件是符号链接，<code>flag</code>参数指出了是否跟随符号链接。如果设置了<code>AT_SYMLINK_FOLLOW</code>，创建指向符号链接目标的链接。否则创建指向符号链接本身的链接。</p>
+<p>创建新目录和增加链接计数应该是一个原子操作。</p>
+<p><strong>删除一个现有目录项，使用<code>unlink</code>函数。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unlinkat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *pathname, <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数删除目录项，并将<code>pathname</code>引用的文件的链接计数减1。如果出错，不进行任何更改。必须对包含该目录项的目录具有写和执行权限。</p>
+<p>在链接计数为0时，内核会检查是否有进程打开了该文件，如果打开该文件进程数为0，且链接计数也为0，才会删除该文件。</p>
+<p><code>unlinkat</code>函数的参数规则和<code>linkat</code>相同。</p>
+<p><code>flag</code>参数可以改变<code>unlinkat</code>函数的行为。设置<code>AT_REMOVEDIR</code>后，<code>unlinkat</code>函数类似于<code>rmdir</code>，可以删除目录。如果该标志清除，那么<code>unlinkat</code>行为与<code>unlink</code>一致。</p>
+<p>如果<code>pathname</code>是符号链接，<code>unlink</code>删除符号链接自身。没有函数能够删除符号链接引用的文件。</p>
+<p><strong>也可以使用<code>remove</code>函数解除对文件和目录的链接。对于文件，<code>remove</code>和<code>unlink</code>相同，对于目录，<code>remove</code>和<code>rmdir</code>相同。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">remove</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *pathname)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="15-rename-和-renameat-函数"><a href="#15-rename-和-renameat-函数" class="headerlink" title="15. rename 和 renameat 函数"></a>15. rename 和 renameat 函数</h2><p>文件或目录可以通过<code>rename</code>和<code>renameat</code>函数重命名。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rename</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *oldname, <span class="keyword">const</span> <span class="keyword">char</span> *newname)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">renameat</span><span class="params">(<span class="keyword">int</span> oldfd, <span class="keyword">const</span> <span class="keyword">char</span> *oldname, <span class="keyword">int</span> newfd, <span class="keyword">const</span> <span class="keyword">char</span> *newname)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>根据<code>oldname</code>的类型，有以下几种情况：</p>
+<ul>
+<li><p><code>oldname</code>指向文件，为该文件重命名。如果<code>newname</code>存在，则它不能是一个目录，之后删除<code>newname</code>目录项，将<code>oldname</code>重命名为<code>newname</code>。</p>
+</li>
+<li><p><code>oldname</code>指向目录，为该目录重命名。如果<code>newname</code>存在，则它不许是一个目录，且为空，之后删除<code>newname</code>目录项，将<code>oldname</code>重命名为<code>newname</code>。</p>
+<p><code>newname</code>不能包含<code>oldname</code>前缀。因为<code>oldname</code>是<code>newname</code>的前缀，不能被删除。</p>
+</li>
+<li><p><code>oldname</code>或<code>newname</code>是符号链接，则处理符号链接自身，不处理其引用的文件。</p>
+</li>
+<li><p>不能重命名<code>.</code>和<code>..</code></p>
+</li>
+<li><p><code>oldname</code>和<code>newname</code>指向同一文件，函数不做任何事情，直接成功返回。</p>
+</li>
+</ul>
+<p>进程需要删除<code>oldname</code>目录项，创建<code>newname</code>目录项，如果<code>newname</code>存在，则需要先删除该目录项。所以对包含<code>oldname</code>的目录和包含<code>newname</code>的目录都应具有写权限。</p>
+<h2 id="16-符号链接"><a href="#16-符号链接" class="headerlink" title="16. 符号链接"></a>16. 符号链接</h2><p>符号链接是对文件的间接指针，为了避开硬链接的限制。</p>
+<ul>
+<li>硬链接通常要求链接和文件在同一文件系统下</li>
+<li>只有超级用户才能创建指向目录的硬链接</li>
+</ul>
+<p>而符号链接的对象和文件系统都没有限制，任何用户都可以创建。符号链接通常用于将目录或文件结构移到系统的另一个位置。</p>
+<p>参数为文件名的函数，需要注意是否处理符号链接。</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217110825366.png" alt="image-20210217110825366" style="zoom:65%;">
+
+<p>上图中的一个例外是，使用<code>O_CREATE</code>和<code>O_EXCL</code>调用<code>open</code>函数，如果路径是符号链接，则会出做，<code>errno</code>设置为<code>EEXIST</code>。目的是防止特权进程被诱导写错误的文件。</p>
+<p>使用符号链接可能会导致循环引用，大多数查找路径名函数都会在此时出错，<code>errno</code>置为<code>ELOOP</code>。</p>
+<h2 id="17-创建和读取符号链接"><a href="#17-创建和读取符号链接" class="headerlink" title="17. 创建和读取符号链接"></a>17. 创建和读取符号链接</h2><p><strong>使用<code>symlink</code>和<code>symlinkat</code>函数创建符号链接</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"> <span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">symlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *actualpath, <span class="keyword">const</span> <span class="keyword">char</span> *sympath)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">symlinkat</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span> *actualpath, <span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span> *sympath)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>函数创建一个指向<code>actualpath</code>的新目录项<code>sympath</code>。不要求<code>actualpath</code>已经存在，且不需要在同一文件系统之下。</p>
+<p><strong>打开符号链接，并读取链接的内容，使用<code>readlink</code>和<code>readlinkat</code>函数</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回读取的字节数  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readlink</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> pathname, <span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> bufsize)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">readlinkat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> pathname, <span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> bufsize)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数组合了<code>open</code>、<code>read</code>和<code>close</code>。如果函数成功执行，返回读入<code>buf</code>的字节数，且<code>buf</code>的内容不以<code>null</code>结束。</p>
+<h2 id="18-文件时间"><a href="#18-文件时间" class="headerlink" title="18. 文件时间"></a>18. 文件时间</h2><p>每个文件维护三个时间字段，意义如下：</p>
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217172026438.png" alt="image-20210217172026438" style="zoom: 67%;">
+
+<img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217172310075.png" alt="image-20210217172310075" style="zoom:65%;">
+
+<p><strong><em>修改一个文件或目录时，包含该文件或目录的父目录也会被修改</em></strong>。因为不仅仅修改其i节点，但是读/写一个文件只影响他的i节点。</p>
+<h2 id="19-futimens、utimenstat-和-utimes函数"><a href="#19-futimens、utimenstat-和-utimes函数" class="headerlink" title="19. futimens、utimenstat 和 utimes函数"></a>19. futimens、utimenstat 和 utimes函数</h2><p><strong>一个文件的访问和修改时间可以通过这三个函数修改。其中，<code>futimens</code>和<code>utimenstat </code>可以指定纳秒级别的精度。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">futimens</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> struct timespec times[<span class="number">2</span>])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">utimenstat</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> struct timespec times[<span class="number">2</span>], <span class="keyword">int</span> flag)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数的<code>times</code>数组中的第一个元素为访问时间，第二个元素为修改时间。这两个时间值是日历时间。</p>
+<p><code>times</code>参数有以下四种形式：</p>
+<ul>
+<li><code>times</code>是空指针，访问时间和修改时间被设置为当前时间</li>
+<li><code>times</code>是指向两个<code>timespec</code>结构的指针，如果任一元素的<code>tv_nsec</code>值为<code>UTIME_NOW</code>，忽略<code>tv_sec</code>字段，对应的时间设置为当前时间</li>
+<li><code>times</code>是指向两个<code>timespec</code>结构的指针，如果任一元素的<code>tv_nsec</code>值为<code>UTIME_OMIT</code>，对应的时间保持不变</li>
+<li><code>times</code>是指向两个<code>timespec</code>结构的指针，且任一元素的<code>tv_nsec</code>值不是<code>UTIME_NOW</code>或<code>UTIME_OMIT</code>，对应时间设置为<code>tv_sec</code>和<code>tv_nsec</code>的值</li>
+</ul>
+<p><strong>执行这些函数需要的权限取决于<code>times</code>参数的值</strong></p>
+<ul>
+<li><code>times</code>是空指针，或如果任一元素的<code>tv_nsec</code>值为<code>UTIME_NOW</code>，则进程的有效ID必须等于该文件所有者ID，进程对该文件具有写权限；或进程是一个超级用户进程</li>
+<li><code>times</code>是非空指针，且任一元素的<code>tv_nsec</code>值不是<code>UTIME_NOW</code>也不是<code>UTIME_OMIT</code>，则进程的有效ID必须等于该文件所有者ID，或进程是一个超级用户进程，进程对该文件只具有写权限是不够的</li>
+<li><code>times</code>是非空指针，且<code>tv_nsec</code>的两个字段都是<code>UTIME_OMIT</code>，不执行权限检查</li>
+</ul>
+<p><code>futimens</code>需要打开文件来更改时间。<code>utimenstat</code>行为类似通常的<code>at</code>结尾函数。</p>
+<p><code>utimenstat</code>函数的<code>flag</code>参数用于符号链接跟随，如果设置<code>AT_SYMLINK_NOFOLLOW</code>，符号链接自身时间被修改。否则会跟随符号链接，将文件的时间修改为符号链接的时间。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/times.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">utimes</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">const</span> struct timeval times[<span class="number">2</span>])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">timeval</span> &#123;</span></span><br><span class="line">    <span class="keyword">time_t</span> tv_sec;	<span class="comment">// 秒</span></span><br><span class="line">    <span class="keyword">long</span> tv_usec;	<span class="comment">// 微妙</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>utimes</code>函数对路径名操作。</p>
+<p><strong>我们不能修改状态时间，因为调用这些函数时，状态时间字段会被自动更新。</strong></p>
+<h2 id="20-mkdir、mkdirat-和-rmdir"><a href="#20-mkdir、mkdirat-和-rmdir" class="headerlink" title="20. mkdir、mkdirat 和 rmdir"></a>20. mkdir、mkdirat 和 rmdir</h2><p><strong><code>mkdir</code>和<code>mkdirat</code>用于创建目录，<code>rmdir</code>用于删除目录</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/stat.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkdir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">mode_t</span> mode)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">mkdirat</span><span class="params">(<span class="keyword">int</span> cd, <span class="keyword">const</span> <span class="keyword">char</span>* pathname, <span class="keyword">mode_t</span> mode)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这两个函数创建一个空目录，其中<code>.</code>和<code>..</code>时是自动创建。<code>mode</code>指定文件访问权限，由进程的文件模式创建屏蔽字修改。</p>
+<p>常见的错误是指定与文件相同的<code>mode</code>，即读写，但是目录还需要执行权限，一边访问目录内的文件名</p>
+<p><strong><code>rmdir</code>用于删除空目录，空目录只包含<code>.</code>和<code>..</code></strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">rmdir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果调用<code>rmdir</code>后，目录的链接计数为0，且没有其他进程打开该目录，则释放该目录占据的空间。</p>
+<p>如果目录的链接计数为0，有其他进程打开该目录，则在<code>rmdir</code>返回前，删除最后一个链接及<code>.</code>和<code>..</code>项。且在此目录中不能创建文件，但是在最后一个进程关闭之前不释放此目录。</p>
+<h2 id="21-读目录"><a href="#21-读目录" class="headerlink" title="21. 读目录"></a>21. 读目录</h2><p>对目录具有访问权限，就可以读目录。但是只有内核才能写目录。</p>
+<p>读取目录的函数有很多，如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;dirent.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回指针  出错返回NULL</span></span><br><span class="line"><span class="function">DIR* <span class="title">opendir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname)</span></span>;</span><br><span class="line"><span class="function">DIR* <span class="title">fdopendir</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回指针  若在目录尾或出错返回NULL</span></span><br><span class="line"><span class="function">struct dirent* <span class="title">readdir</span><span class="params">(DIR* dp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rewinddir</span><span class="params">(DIR* dp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">closedir</span><span class="params">(DIR* dp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 与dp关联的目录中的当前位置</span></span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">telldir</span><span class="params">(DIR* dp)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">seekdir</span><span class="params">(DIR* dp, <span class="keyword">long</span> loc)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>fopendir</code>将打开的文件描述符转换为目录处理函数需要的DIR结构</p>
+</li>
+<li><p><code>telldir</code>和<code>seekdir</code>，在符合UNIX系统的实现都会提供这两个函数</p>
+</li>
+<li><p><code>dirent</code>结构与实现有关，此结构的定义至少包含下列两个成员</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ino_t</span> d_ino;	<span class="comment">// i节点编号</span></span><br><span class="line"><span class="keyword">char</span> d_name[];	<span class="comment">// 不包含NULL终止字节的文件名</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// d_name的大小没有指定，至少要包含NAME_MAX个字节</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>opendir</code>和<code>fdopendir</code>返回的指向<code>DIR</code>结构的指针由其他五个函数调用。<code>opendir</code>执行初始化操作，使第一个<code>readdir</code>返回目录中的第一个目录项。<code>fdopendir</code>执行初始化操作，第一个<code>readdir</code>返回的目录项取决于<code>fd</code>的文件偏移量。</p>
+<p>目录中的各项顺序与实现有关，通常不按照字母顺序排列</p>
+</li>
+</ul>
+<h2 id="22-chdir、fchdir-和-getcwd函数"><a href="#22-chdir、fchdir-和-getcwd函数" class="headerlink" title="22. chdir、fchdir 和 getcwd函数"></a>22. chdir、fchdir 和 getcwd函数</h2><p>每个进程都有一个当前工作目录，作为搜索所有相对路径名的起点。</p>
+<p><strong>进程调用<code>chdir</code>和<code>fchdir</code>函数更改当前工作目录。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回0  出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">chdir</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* pathname)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fchdir</span><span class="params">(<span class="keyword">int</span> fd)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>内核只保存指向该目录v节点的指针等目录本身信息，不保存该目录的完整路径名。</p>
+<p>Linux内核可以确定完整路径名，完整路径名的组成部分保存在<code>mount</code>表和<code>dcache</code>表中，然后重新组装。</p>
+<p>需要一个函数，从当前工作目录，<code>.</code>开始，用<code>..</code>找到其上级目录，然后读取目录项，直到目录项中i节点编号与工作目录i节点编号相同，就找到了对应的文件名。以此类推，直到根目录，就得到了当前工作目录的完整路径名。<code>getcwd</code>就是这样。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回buf  出错返回NULL</span></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">getcwd</span><span class="params">(<span class="keyword">char</span>* buf, <span class="keyword">size_t</span> size)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>buf</code>为缓冲区地址，<code>size</code>为缓冲区长度，必须足够容纳路径名以及终止null字节。否则返回出错。</p>
+<h2 id="23-设备特殊文件"><a href="#23-设备特殊文件" class="headerlink" title="23. 设备特殊文件"></a>23. 设备特殊文件</h2><p><code>st_dev</code>和<code>st_rdev</code>这两个字段容易引起混淆。其规则如下：</p>
+<ul>
+<li>每个文件系统所在设备都由其主、次设备号组成。设备号的数据类型为<code>st_dev</code>。主设备号标识设备驱动程序，有时编码为与其通信的外设板；次设备号标识特定的子设备。</li>
+<li>通常使用宏，<code>major</code>和<code>minor</code>来访问主、次设备号</li>
+<li><code>stat</code>结构的<code>st_dev</code>是该文件所在文件系统的设备号，该文件系统包含了这一文件名与其对应的i节点</li>
+<li>只有字符特殊文件和块特殊文件才有<code>st_rdev</code>值。包含实际设备的设备号</li>
+</ul>
+<h2 id="24-文件访问权限小结"><a href="#24-文件访问权限小结" class="headerlink" title="24. 文件访问权限小结"></a>24. 文件访问权限小结</h2><img src="/2021/03/05/apue-4-%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95/image-20210217221916738.png" alt="image-20210217221916738" style="zoom:65%;">
+
+<p>最后9个常量可以分成三组</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">S_IRWXU = S_IRUSR | S_IWUSR | S_IXUSR</span><br><span class="line">S_IRWXG = S_IRGRP | S_IWGRP | S_IXGRP</span><br><span class="line">S_IRWXO = S_IROTH | S_IWOTH | S_IXOTH</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/unix/"># unix</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/03/05/apue-5-%E6%A0%87%E5%87%86IO%E5%BA%93/">apue_5_标准IO库</a>
+            
+            
+            <a class="next" rel="next" href="/2021/02/04/apue-3-%E6%96%87%E4%BB%B6IO/">apue-3.文件IO</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

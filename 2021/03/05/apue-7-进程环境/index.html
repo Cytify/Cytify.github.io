@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Cytify">
+
+
+
+
+
+<title>apue_7_进程环境 | Cytify</title>
+
+
+
+    <link rel="icon" href="/0.jfif">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cytify&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cytify&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">apue_7_进程环境</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Cytify</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 5, 2021&nbsp;&nbsp;16:52:21</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/apue/">apue</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-main函数"><a href="#1-main函数" class="headerlink" title="1. main函数"></a>1. main函数</h2><p>C程序总是从<code>main</code>函数开始执行，<code>main</code>函数原型是：</p>
+<p><code>int main(int argc, char* argv[])</code></p>
+<ul>
+<li><code>argc</code>是命令行参数的个数，<code>argv</code>是指向指针的数组。</li>
+</ul>
+<p>在内核执行C程序时，即内核调用<code>exec</code>函数，在调用<code>main</code>函数之前，调用一个特殊的启动例程。可执行文件将次启动例程指定为程序的起始地址，这是由C编译器调用连接编辑器设置的。启动例程从内核获得命令行参数和环境变量值。</p>
+<h2 id="2-进程终止"><a href="#2-进程终止" class="headerlink" title="2. 进程终止"></a>2. 进程终止</h2><p><strong>有8种方式结束进程，其中5种是正常终止：</strong></p>
+<ul>
+<li>从<code>main</code>返回</li>
+<li>调用<code>exit</code></li>
+<li>调用<code>_exit</code>或<code>_Exit</code></li>
+<li>最后一个线程从其启动例程返回</li>
+<li>从最后一个线程调用<code>pthread_exit</code></li>
+</ul>
+<p><strong>异常终止的方式有3种：</strong></p>
+<ul>
+<li>调用<code>abort</code></li>
+<li>接到一个信号</li>
+<li>最后一个线程对取消请求做出响应</li>
+</ul>
+<p>启动例程使得从<code>main</code>返回后，立即调用<code>exit</code>函数。启动例程通常由汇编语言编写，它调用<code>main</code>函数的C代码如下：</p>
+<p><code>exit(main(argc, argv))</code></p>
+<h3 id="2-1-退出函数"><a href="#2-1-退出函数" class="headerlink" title="2.1 退出函数"></a>2.1 退出函数</h3><p>三个函数用于正常终止程序：<code>_exit</code>和<code>_Exit</code>立即进入内核，<code>exit</code>则先执行一些清理处理，然后返回内核。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">exit</span><span class="params">(<span class="keyword">int</span> status)</span></span>;</span><br><span class="line"><span class="keyword">void</span> _Exit(<span class="keyword">int</span> status);</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="keyword">void</span> _exit(<span class="keyword">int</span> status);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>exit</code>函数总是执行一个标准IO库的清理操作，对所有打开的流调用<code>fclose</code>。</p>
+</li>
+<li><p><code>status</code>是终止状态。在一下情况下，进程的终止状态是未定义的：</p>
+<ul>
+<li>调用这三个函数，不带终止状态</li>
+<li><code>main</code>执行了无返回值的<code>return</code>语句</li>
+<li><code>main</code>没有声明返回类型为整型</li>
+</ul>
+<p>如果<code>main</code>的返回类型是整型，且<code>main</code>执行到最后一条语句时返回，那么进程的终止状态是0</p>
+</li>
+<li><p><code>main</code>返回整型与调用<code>exit</code>时等价的，即:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">exit</span>(<span class="number">0</span>);  ==  <span class="keyword">return</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="2-2-atexit函数"><a href="#2-2-atexit函数" class="headerlink" title="2.2 atexit函数"></a>2.2 atexit函数</h3><p>ISO C规定一个进程可以登记最多32个函数，这些函数由<code>exit</code>调用，这些函数称为终止处理程序。<code>atexit</code>函数用于登记这些函数。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回非0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">atexit</span><span class="params">(<span class="keyword">void</span> (*func)(<span class="keyword">void</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>exit</code>调用这些函数的顺序与登记的顺序相反，一个函数如果多次登记，也会被多次调用。</p>
+</li>
+<li><p>在程序结束时，<code>exit</code>首先调用终止处理程序，关闭所有打开的流。如果程序调用<code>exec</code>函数，则清除所有已登记的终止处理程序</p>
+</li>
+<li><p>下图为C程序的启动和执行方式，可以看出，内核执行程序的唯一方式是<code>exec</code>函数，进程自愿终止的唯一方法是调用退出函数，或非自愿的接收到一个信号</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/image-20210225214014715.png" alt="image-20210225214014715" style="zoom:65%;">
+
+</li>
+</ul>
+<h2 id="3-命令行参数"><a href="#3-命令行参数" class="headerlink" title="3. 命令行参数"></a>3. 命令行参数</h2><p>在执行一个程序时，调用<code>exec</code>的进程将命令行参数传递给新程序。在<code>main</code>函数中的表示如下：</p>
+<p><code>int main(int argc, char* argv[])</code></p>
+<p>其中<code>argv[argc]</code>是一个空指针，可以作为遍历结束的条件。</p>
+<h2 id="4-环境表"><a href="#4-环境表" class="headerlink" title="4. 环境表"></a>4. 环境表</h2><p>每个程序都接收到一张环境表。环境表也是一个字符指针数组，其中每个指针包含一个<code>null</code>字符结尾的字符串的地址。全局变量<code>environ</code>包含了该指针数组的地址。</p>
+<p>如下图所示：**<code>environ</code>为环境指针，指针数组为环境表，指针指向的字符串为环境字符串**</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/image-20210228214734802.png" alt="image-20210228214734802" style="zoom:65%;">
+
+<p><strong>通常，环境字符串由<code>name = value</code>形式组成</strong></p>
+<h2 id="5-C程序的存储空间布局"><a href="#5-C程序的存储空间布局" class="headerlink" title="5. C程序的存储空间布局"></a>5. C程序的存储空间布局</h2><p><strong>C程序一般由一下几部分组成：</strong></p>
+<ul>
+<li>正文段。<strong>CPU执行的机器指令部分。</strong>通常，正文段是可共享的，所以，需要频繁使用的程序只需要由一份副本即可，且只读，以防程序修改指令。</li>
+<li>初始化数据段。包含了程序中明确需要赋初值的变量。<strong>即C程序中，任何函数之外的声明，即全局变量</strong></li>
+<li>未初始化数据段。通常称为<code>bss</code>段。在程序开始之前，内核将此段中的数据初始化为0或空指针。同样，该段数据是全局数据</li>
+<li>栈。保存函数调用时的一些基本信息，参数压栈等信息。</li>
+<li>堆。在堆中进行动态内存分配，位于未初始化数据段和栈之间。</li>
+</ul>
+<p>其典型的排布如下：</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/image-20210228215848160.png" alt="image-20210228215848160" style="zoom:65%;">
+
+<p>可以看出，<code>bss</code>段不需要存储在磁盘中，磁盘只需要存储正文段和初始化的数据即可。</p>
+<h2 id="6-共享库"><a href="#6-共享库" class="headerlink" title="6. 共享库"></a>6. 共享库</h2><p>共享库使得可执行文件不需要包含公用的库函数，只需要在所有进程都可引用的存储区保存这种库的一个副本。</p>
+<p>程序第一次执行或第一次调用库函数时，动态链接地将层序与共享库连接起来。减少了每个可执行文件的长度，但增加了一些时间开销。这些时间开销主要发生在程序第一次被执行时，或共享库函数被第一次调用。</p>
+<p>共享库的优点是可以不重新编译程序的前提下，更换库函数的版本。</p>
+<h2 id="7-存储空间分配"><a href="#7-存储空间分配" class="headerlink" title="7. 存储空间分配"></a>7. 存储空间分配</h2><p><strong>ISO C说明了三个分配空间的函数</strong></p>
+<ul>
+<li><code>malloc</code>，分配指定字节的存储区，其中的值不确定</li>
+<li><code>calloc</code>，为指定数量指定长度的对象分配存储区，每一位都为0</li>
+<li><code>realloc</code>，增加或减少以前分配区的长度。当增加长度时，可能需要将以前的内容移动到另外的地方，新增区域的值不确定</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回非空指针；出错返回NULL</span></span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">malloc</span><span class="params">(<span class="keyword">size_t</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">calloc</span><span class="params">(<span class="keyword">size_t</span> nobj, <span class="keyword">size_t</span> size)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span>* <span class="title">realloc</span><span class="params">(<span class="keyword">void</span>* ptr, <span class="keyword">size_t</span> newsize)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">free</span><span class="params">(<span class="keyword">void</span>* ptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>这三个函数返回的指针一定是对齐的，适用于任何数据对象</li>
+<li>函数返回值为<code>void*</code>，如果包含<code>&lt;stdlib.h&gt;</code>，将返回指针赋予不同类型指针时，不需要显式强制类型转换。</li>
+<li><code>realloc</code>函数的重新分配，如果在原有地址上由足够大小的空间，在原存储区域内向高地址方向扩充。如果原存储区大小不够，就重新分配一块足够大的区域，将数据复制过去</li>
+<li>这些分配空间函数，通常使用<code>sbrk</code>系统调用实现</li>
+</ul>
+<h2 id="8-环境变量"><a href="#8-环境变量" class="headerlink" title="8. 环境变量"></a>8. 环境变量</h2><p><strong>ISO C定义了<code>getenv</code>函数，取出环境变量值</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：指向与name关联的value指针；未找到返回NULL</span></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">getenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>此函数返回<code>name=value</code>中的<code>value</code>指针</li>
+</ul>
+<p>一些预定义的环境变量如下：</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/image-20210302112928144.png" alt="image-20210302112928144" style="zoom:65%;">
+
+<p>其余环境变量的操作函数如下：</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/Users\Cbxa\AppData\Roaming\Typora\typora-user-images\image-20210302113051490.png" alt="image-20210302113051490" style="zoom:65%;">
+
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回非0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">putenv</span><span class="params">(<span class="keyword">char</span>* str)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name, <span class="keyword">const</span> <span class="keyword">char</span>* value, <span class="keyword">int</span> rewrite)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unsetenv</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>putenv</code>将<code>name=value</code>的字符串转换为环境变量，如果<code>name</code>已经存在，删除原来的定义</li>
+<li><code>setenv</code>将<code>name</code>设置为<code>value</code>，如果<code>name</code>已经存在，则需要参考<code>rewrite</code>的值。如果<code>rewrite</code>非0，则删除原来定义；如果<code>rewrite</code>为0，则不删除原来定义，也不更新环境变量</li>
+<li><code>unsetenv</code>删除<code>name</code>环境变量，无论<code>name</code>是否存在</li>
+<li><code>putenv</code>直接将<code>str</code>放到环境中，所以<code>str</code>如果在栈上，就会出错。<code>setenv</code>根据<code>name</code>和<code>value</code>，创建环境字符串</li>
+</ul>
+<p><strong>环境字符串是存储在环境表中，环境表位于栈之上的，这个特殊位置使得环境字符串的增加变得困难，因为不能再向该地址扩展空间了。</strong></p>
+<ul>
+<li><p>删除环境字符串</p>
+<p>删除环境字符串，现在环境表中找到该指针，将其后的指针依次移动即可。</p>
+</li>
+<li><p>修改现有的环境字符串</p>
+<ul>
+<li>新<code>value</code>的长度小于或等于旧<code>value</code>的长度，将新字符串复制到旧<code>value</code>的位置即可</li>
+<li>新<code>value</code>的长度大于旧<code>value</code>的长度，为新字符串分配空间，将新字符串复制过去，将指针指向新分配区</li>
+</ul>
+</li>
+<li><p>增加环境字符串</p>
+<p>首先，为新字符串分配空间，将新字符串复制过去。</p>
+<ul>
+<li>如果是第一次新增环境字符串，为新的环境表分配空间，将原来环境表复制到新环境表中，将新字符串指针放到新环境表表尾，将一个空指针放到最后位置。最后，使<code>environ</code>指向新环境表。</li>
+<li>如果不是第一次新增环境字符串，可知原来的空间，直接调用<code>realloc</code>，多分配一个指针的空间，将新指针放入即可。最后位置放空指针。</li>
+</ul>
+</li>
+</ul>
+<h2 id="9-setjmp-和-longjmp-函数"><a href="#9-setjmp-和-longjmp-函数" class="headerlink" title="9. setjmp 和 longjmp 函数"></a>9. setjmp 和 longjmp 函数</h2><p><strong><code>setjmp</code>和<code>longjmp</code>函数执行跳转功能，主要处理深层嵌套函数的出错情况</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;setjmp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：直接调用，返回0；从longjmp返回，返回非0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setjmp</span><span class="params">(jmp_buf env)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">longjmp</span><span class="params">(jmp_buf env, <span class="keyword">int</span> val)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>在希望返回的位置调用<code>setjmp</code>函数</li>
+<li><code>jmp_buf</code>是一个特殊类型，是某种形式的数据，记录了调用<code>longjmp</code>时能够恢复栈状态的信息，<code>env</code>变量通常是全局变量</li>
+<li><code>val</code>是非0的值，称为<code>setjmp</code>返回的值。如果由多个<code>longjmp</code>，该参数就可以处理那个函数被调用</li>
+</ul>
+<h3 id="9-1-自动变量、寄存器变量、易失变量"><a href="#9-1-自动变量、寄存器变量、易失变量" class="headerlink" title="9.1 自动变量、寄存器变量、易失变量"></a>9.1 自动变量、寄存器变量、易失变量</h3><p>在调用<code>longjmp</code>时，自动变量、寄存器变量、易失变量是否会回滚到原先值时不确定的。声明为全局变量、易失变量和静态变量的值在调用<code>longjmp</code>后是保持变化的。</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/4.png" alt="4" style="zoom:80%;">
+
+<p><strong>某个系统的<code>setjmp</code>说明，存放在存储中的变量保持<code>longjmp</code>时的值，在CPU和浮点寄存器中的值恢复为调用<code>setjmp</code>时的值。</strong></p>
+<p>在未使用优化的编译之前，五个变量都放在存储器中，忽略<code>register</code>；使用<code>-O</code>编译之后，<code>autoval</code>和<code>regival</code>都存放在寄存器中。<code>volaval</code>变量放在存储器中。</p>
+<h2 id="10-getrlimit-和-setrlimit-函数"><a href="#10-getrlimit-和-setrlimit-函数" class="headerlink" title="10. getrlimit 和 setrlimit 函数"></a>10. getrlimit 和 setrlimit 函数</h2><p><strong>每个进程都有一组资源，使用<code>getrlimit</code>和<code>setrlimit</code>获得</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/resource.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回非0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getrlimit</span><span class="params">(<span class="keyword">int</span> resource, struct rlimit* rlptr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setrlimit</span><span class="params">(<span class="keyword">int</span> resource, <span class="keyword">const</span> struct rlimit* rlptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>两个函数调用时，都指定一个资源和指针。<code>struct rlimit</code>结构如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">rlimit</span> &#123;</span></span><br><span class="line">    <span class="keyword">rlim_t</span> rlim_cur;		<span class="comment">// 软限制 当前限制</span></span><br><span class="line">    <span class="keyword">rlim_t</span> rlim_max;		<span class="comment">// 硬限制 rlim_cur的最大值</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在更改资源限制时，遵循以下3条规则：</p>
+<ul>
+<li>任何一个进程都可以将软限制值更改为小于等于硬限制值</li>
+<li>任何一个进程都可以降低其硬限制值，但必须大于等于软限制值。这种改变对于普通用户来说不可逆</li>
+<li>只有超级用户进程可以提高硬限制值</li>
+</ul>
+</li>
+<li><p>常量<code>RLIM_INFINITY</code>代表无限量的限制</p>
+</li>
+<li><p><code>resouce</code>取值如下图：</p>
+<img src="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/image-20210305110903137.png" alt="image-20210305110903137" style="zoom:65%;">
+
+<ul>
+<li><code>RLIMIT_AS</code>，进程总的可用存储空间的最大字节值。</li>
+<li><code>RLIMIT_CORE</code>，<code>core</code>文件的最大字节数，若值为0，则阻止创建<code>core</code>文件</li>
+<li><code>RLIMIT_CPU</code>，CPU时间的最大秒量值，超过此软限制时，向进程发送<code>SIGXFSZ</code>信号</li>
+<li><code>RLIMIT_DATA</code>，数据段的最大字节</li>
+<li><code>RLIMIT_FSIZE</code>，可创建文件的最大字节，超过此软限制时，向进程发送<code>SIGXFSZ</code>信号</li>
+<li><code>RLIMIT_MEMLOCK</code>，进程使用<code>mlock</code>能够锁定在存储空间的最大字节</li>
+<li><code>RLIMIT_MSGQUEUE</code>，进程位POSIX消息队列可分配的最大存储字节数</li>
+<li><code>RLIMIT_NICE</code>，影响进程的调度优先级，<code>nice</code>值可设置的最大限制</li>
+<li><code>RLIMIT_NOFILE</code>，进程能打开的最多文件数</li>
+<li><code>RLIMIT_NPROC</code>，每个实际用户ID可拥有的最大进程数</li>
+<li><code>RLIMIT_NPTS</code>，用户可打开的伪终端的最大数量</li>
+<li><code>RLIMIT_RSS</code>，最大驻内存及字节长度。如果可用的物理存储器特别少，内核将从进程处取回超过RSS的部分</li>
+<li><code>RLIMIT_SBSIZE</code>，在任一给定时刻，用户可拥有的套接字缓冲区最大字节</li>
+<li><code>RLIMIT_SIGPENDING</code>，一个进程可排队的信号最大数量</li>
+<li><code>RLIMIT_STACK</code>，栈的最大字节长度</li>
+<li><code>RLIMIT_SWAP</code>，用户可消耗交换空间的最大字节</li>
+<li><code>RLIMIT_VMEM</code>，<code>RLIMIT_AS</code>的同义词</li>
+</ul>
+</li>
+<li><p>资源限制影响调用进程，以及其子进程</p>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/unix/"># unix</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/">apue_6_系统数据文件和信息</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

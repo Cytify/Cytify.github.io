@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Cytify">
+
+
+
+
+
+<title>apue_6_系统数据文件和信息 | Cytify</title>
+
+
+
+    <link rel="icon" href="/0.jfif">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cytify&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cytify&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">apue_6_系统数据文件和信息</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Cytify</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 5, 2021&nbsp;&nbsp;16:48:55</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/apue/">apue</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="1-口令文件"><a href="#1-口令文件" class="headerlink" title="1. 口令文件"></a>1. 口令文件</h2><p>UNIX系统口令文件包含以下字段，这些字段包含在<code>&lt;pwd.h&gt;</code>的<code>passwd</code>结构中。</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222110831925.png" alt="image-20210222110831925" style="zoom:65%;">
+
+<p>口令文件是<code>/etc/passwd</code>，是一个ACSII文件，字段之间用冒号隔开。</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/0.png" alt="0" style="zoom:80%;">
+
+<p>登录项也有些注意事项：</p>
+<ul>
+<li>通常有一个<code>root</code>用户，ID为0，是超级用户</li>
+<li>加密口令字段包含一个占位符</li>
+<li><code>shell</code>字段包含一个可执行程序名，被用作用户的登录<code>shell</code>。若该字段为空，通常有默认<code>shell</code></li>
+<li>为了阻止用户登录，可以将登录<code>shell</code>设置为<code>/dev/null /bin/false /bin/true</code>，还有<code>nologin</code>命令，打印出错信息，以非0终止</li>
+<li><code>nobody</code>用户的一个目的是，使得任何人可以登陆系统。但只能访问人人可读、写的文件</li>
+</ul>
+<p><strong>POSIX.1定义了两个获取口令文件项的函数。给出用户登录名或数值用户ID后，就可查看相关项。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pwd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回指针  出错返回NULL</span></span><br><span class="line"><span class="function">struct passwd* <span class="title">getpwuid</span><span class="params">(<span class="keyword">uid_t</span> uid)</span></span>;</span><br><span class="line"><span class="function">struct passwd* <span class="title">getpwnam</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>getpwuid</code>函数由<code>ls</code>命令获取，将i节点中的数字用户ID转换为用户名</li>
+<li><code>getpwnam</code>函数在输入登录名时，由<code>login</code>程序调用</li>
+<li>这两个函数指向<code>passwd</code>结构，该结构通常为函数内部静态变量</li>
+</ul>
+<p><strong>如果查看整个口令文件，也可以用以下函数</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pwd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回指针  出错或达到文件尾端返回NULL</span></span><br><span class="line"><span class="function">struct passwd* <span class="title">getpwent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setpwent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">endpwent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>getpwent</code>函数返回口令文件的下一个记录项。</li>
+<li><code>setpwent</code>将口令文件指针指向开头</li>
+<li><code>endpwent</code>关闭这些文件。使用<code>getpwent</code>后，一定要调用<code>endpwent</code>关闭这些文件</li>
+</ul>
+<h2 id="2-阴影口令"><a href="#2-阴影口令" class="headerlink" title="2. 阴影口令"></a>2. 阴影口令</h2><p>加密口令是经过单向加密算法的用户口令副本，不能从加密后的口令转到原来的口令。</p>
+<p>某些系统加这些加密过的口令存放在称为<strong>阴影口令</strong>中的文件。</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222113454595.png" alt="image-20210222113454595" style="zoom:65%;">
+
+<p>其中只有用户登陆名和加密口令这两个字段是必须存在的。其他字段可选。</p>
+<p><strong>在Linux中，有以下几个函数可以读取阴影口令文件。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;shadow.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回指针  出错返回NULL</span></span><br><span class="line"><span class="function">struct spwd* <span class="title">getspname</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name)</span></span>;</span><br><span class="line"><span class="function">struct spwd* <span class="title">getspent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setspent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">endspent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-组文件"><a href="#3-组文件" class="headerlink" title="3. 组文件"></a>3. 组文件</h2><p>UNIX组文件包含下图字段。这些字段定义在<code>&lt;grp.h&gt;</code>的<code>group</code>结构</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222163113129.png" alt="image-20210222163113129" style="zoom:65%;">
+
+<p><code>gr_mem</code>字段是一个指针数组，其中每个指针指向一个属于该组的用户名。该数组以<code>null</code>结尾。</p>
+<p><strong>POSIX.1定义的下两个函数可以查看组名或数值组ID</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;grp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功返回指针  出错返回NULL</span></span><br><span class="line"><span class="function">struct group* <span class="title">getgrid</span><span class="params">(<span class="keyword">gid_t</span> gid)</span></span>;</span><br><span class="line"><span class="function">struct group* <span class="title">getgrnam</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>返回指向静态变量的指针，在每次调用时，都会重写该变量。</p>
+<p><strong>搜索整个组文件，需要下面三个函数</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;grp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值:  成功返回指针  出错或达到文件尾，返回NULL</span></span><br><span class="line"><span class="function">struct group* <span class="title">getgrent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">setgrent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">endgrent</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>这三个函数与口令文件的三个函数作用相同</p>
+<h2 id="4-附属组ID"><a href="#4-附属组ID" class="headerlink" title="4. 附属组ID"></a>4. 附属组ID</h2><p>是用复数组ID可以不必显式更换组ID，用于参与多个项目时，只需同时属于多个组即可。</p>
+<p><strong>获取和设置组ID有以下三个函数</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功 返回附属组ID数量  出错 返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">getgroups</span><span class="params">(<span class="keyword">int</span> gidsetsize, <span class="keyword">gid_t</span> grouplist[])</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;grp.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值: 成功 返回0  出错 返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">setgroups</span><span class="params">(<span class="keyword">int</span> ngroups, <span class="keyword">const</span> <span class="keyword">gid_t</span> grouplist[])</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">initgroups</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* username, <span class="keyword">gid_t</span> basegid)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>getgroups</code>函数将进程所属用户的附属组ID填写到数组<code>grouplist</code>中，个数最多为<code>gidsetsize</code>，实际填写的个数为返回值</p>
+<p>如果<code>gidsetsize</code>为0，函数返回附属组ID个数，不填写<code>grouplist</code>数组。通常用这种方法确定 <code>grouplist</code>长度。</p>
+</li>
+<li><p><code>setgroups</code>由超级用户调用，为调用进程设置附属组ID。<code>grouplist</code>是组ID数组，<code>ngroups</code>说明数组中的元素个数，该值不能超过<code>NGROUPS_MAX</code></p>
+</li>
+<li><p><code>initgroups</code>读取整个组文件，对<code>username</code>确定组的成员关系，以便为该用户初始化附属组ID表。<code>initgroups</code>也会调用<code>setgroups</code>，所以同样需要超级用户权限。<code>baseid</code>是<code>username</code>在口令文件中的组ID</p>
+</li>
+</ul>
+<h2 id="5-其他数据文件"><a href="#5-其他数据文件" class="headerlink" title="5. 其他数据文件"></a>5. 其他数据文件</h2><p>一般来说，每个数据文件都至少有以下三个函数：</p>
+<ul>
+<li><code>get</code>函数。读下一个记录，如果需要，还会打开文件。函数成功返回指针，达到文件尾端返回空指针。大多数返回的指针是指向静态数据，保存数据需要手动复制。</li>
+<li><code>set</code>函数。打开相应数据文件，定位到文件开头位置。</li>
+<li><code>end</code>函数。关闭相应数据文件。</li>
+<li>如果数据文件支持某种形式的键搜索，也需要提供对应的函数。如口令文件的<code>getpwnam</code></li>
+</ul>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222214714828.png" alt="image-20210222214714828" style="zoom:65%;">
+
+<h2 id="6-登陆账户记录"><a href="#6-登陆账户记录" class="headerlink" title="6. 登陆账户记录"></a>6. 登陆账户记录</h2><p>大多数UNIX系统提供一下两个文件：</p>
+<ul>
+<li><code>utmp</code>文件，记录当前登录到系统的每个用户</li>
+<li><code>wtmp</code>文件，跟踪每个登录和注销事件</li>
+</ul>
+<p>一般来说，每次写入这两个文件的是下列结构的二进制值：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">utmp</span> &#123;</span></span><br><span class="line">    <span class="keyword">char</span> ut_line[<span class="number">8</span>];    <span class="comment">// tty</span></span><br><span class="line">    <span class="keyword">char</span> ut_name[<span class="number">8</span>];	<span class="comment">// login name</span></span><br><span class="line">    <span class="keyword">long</span> ut_time;		<span class="comment">// seconds each epoch</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>登陆时，<code>login</code>程序填写该结构，将其写遇到<code>utmp</code>文件和<code>wtmp</code>文件。注销时，<code>init</code>进程将<code>utmp</code>内记录消除，将一个新纪录添加到<code>wtmp</code>文件。在<code>wtmp</code>的注销记录中，<code>ut_name</code>字段清除为0。在系统再启动，或更改系统时间和日期的前后，都会对<code>wtmp</code>文件添加特殊的记录项。</p>
+<h2 id="7-系统标识"><a href="#7-系统标识" class="headerlink" title="7. 系统标识"></a>7. 系统标识</h2><p>POSIX.1定义了<code>uname</code>函数，返回与主机和操作系统有关的信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/utsname.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回非负值；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">uname</span><span class="params">(struct utsname* name)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p>该函数传递一个<code>name</code>参数，并由该函数填写该结构。结构的最少需要提供的字段如下，每个数组的长度由实现确定</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">utsname</span> &#123;</span></span><br><span class="line">	<span class="keyword">char</span> sysname[];		<span class="comment">// 操作系统名字</span></span><br><span class="line">    <span class="keyword">char</span> nodename[];	<span class="comment">// 该节点名字</span></span><br><span class="line">    <span class="keyword">char</span> release[];		<span class="comment">// 当前系统的release</span></span><br><span class="line">    <span class="keyword">char</span> version[];		<span class="comment">// 当前系统发布的版本</span></span><br><span class="line">    <span class="keyword">char</span> machine[];		<span class="comment">// 硬件类型名字</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>每个字符串以<code>null</code>字节结尾。<code>utsname</code>结构信息可用<code>uanme</code>命令打印。</p>
+<p><strong>POSIX.1定义了<code>gethostname</code>函数，返回主机名，通常为TCP/IP网络上的主机名</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line">    </span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gethostname</span><span class="params">(<span class="keyword">char</span>* name, <span class="keyword">int</span> namelen)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><code>namelen</code>指定缓冲区长度，最大值为<code>HOST_NAME_MAX</code>，<code>name</code>返回的字符串以<code>null</code>字节结尾。</p>
+<p>下图为最大名字长度在不同系统上的值。</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222220124731.png" alt="image-20210222220124731" style="zoom:65%;">
+
+<h2 id="8-时间、日期"><a href="#8-时间、日期" class="headerlink" title="8. 时间、日期"></a>8. 时间、日期</h2><p>UNIX内核提供的时间是计算从协调世界时 UTC，公元1970年1月1日00:00:00以来，经过的秒数。这种秒数以<code>time_t</code>存储，称之为日历时间，日历时间包括时间和日期。</p>
+<p><code>time</code>函数可返回当前时间和日期</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回时间值；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">time_t</span> <span class="title">time</span><span class="params">(<span class="keyword">time_t</span>* calptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>时间值作为结果返回，如果<code>calptr</code>非空，时间值也存放在<code>calptr</code>中。</li>
+</ul>
+<p>POSIX.1扩展了多个系统时钟。时钟通过<code>clockid_t</code>类型标识，具体值如下：</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222221412110.png" alt="image-20210222221412110" style="zoom:65%;">
+
+<p><strong><code>clock_gettime</code>函数获取指定时钟的时间。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">clock_gettime</span><span class="params">(<span class="keyword">clockid_t</span> clock_id, struct timespec* tsp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>当时钟ID设置为<code>CLOCK_REALTIME</code>，<code>clock_gettime</code>功能与<code>time</code>类似。但是精度高的系统中，时间值的精度可能更高。</li>
+</ul>
+<p><strong><code>clock_getres</code>函数获取指定时钟的时间</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">clock_getres</span><span class="params">(<span class="keyword">clockid_t</span> clock_id, struct timespec* tsp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>该函数将<code>tsp</code>所指结构初始化为<code>clock_id</code>对应的时钟精度。</li>
+</ul>
+<p><strong><code>clock_settime</code>函数对特定的时钟设定时间</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回0；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">clock_settime</span><span class="params">(<span class="keyword">clockid_t</span> clock_id, <span class="keyword">const</span> struct timespec* tsp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>gettimeofday</code>函数已被弃用，但一些程序还在使用它，他对比<code>time</code>可提供更高的精度</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：总是返回0</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">gettimeofday</span><span class="params">(struct timeval* tp, <span class="keyword">void</span>* <span class="keyword">restrict</span> tzp)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>tzp</code>的唯一合法值为<code>NULL</code>。</li>
+<li><code>gettimeofday</code>函数将秒数存放在<code>timeval</code>结构中，该结构将当前时间表示为秒和微妙。</li>
+</ul>
+<p>取得了从特定时间经过的秒数之后，需要调用函数将其转换为分解的时间结构，调用另一个函数生成可读的时间和日期。它们之间的关系变化如下图所示</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222222931519.png" alt="image-20210222222931519" style="zoom:90%;">
+
+<p><strong><code>localtime</code>和<code>gmtime</code>将日历时间转换分解后的时间，存放在<code>tm</code>结构中</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：指向`tm`结构的指针；出错返回NULL</span></span><br><span class="line"><span class="function">struct tm* <span class="title">gmtime</span><span class="params">(<span class="keyword">const</span> <span class="keyword">time_t</span>* calptr)</span></span>;</span><br><span class="line"><span class="function">struct tm* <span class="title">localtime</span><span class="params">(<span class="keyword">const</span> <span class="keyword">time_t</span>* calptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>tm</code>结构定义如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">tm</span> &#123;</span></span><br><span class="line">    <span class="keyword">int</span> tm_sec;		<span class="comment">// 秒 [0-60]	</span></span><br><span class="line">    <span class="keyword">int</span> tm_min;		<span class="comment">// 分钟 [0-59]</span></span><br><span class="line">    <span class="keyword">int</span> tm_hour;	<span class="comment">// 小时 [0-23]</span></span><br><span class="line">    <span class="keyword">int</span> tm_mday;	<span class="comment">// 天数 [1-31]</span></span><br><span class="line">    <span class="keyword">int</span> tm_mon;		<span class="comment">// 月份 [0-11]</span></span><br><span class="line">    <span class="keyword">int</span> tm_year;	<span class="comment">// 1900后的年数</span></span><br><span class="line">    <span class="keyword">int</span> tm_wday;	<span class="comment">// 周日以来的天数 [0-6]</span></span><br><span class="line">    <span class="keyword">int</span> tm_yday;	<span class="comment">// 一月一日以来的天数 [0-365]</span></span><br><span class="line">    <span class="keyword">int</span> tm_isdst;	<span class="comment">// 夏令时的标志</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>夏令时生效，该标志为正；非夏令时，该标志为0；如果此信息不可用，则为负。</p>
+</li>
+<li><p><code>localtime</code>返回的是本地时间</p>
+</li>
+<li><p><code>gmtime</code>返回的是协调通用时间，UTC</p>
+</li>
+</ul>
+<p><strong><code>mktime</code>函数以本地时间作为参数，转换为<code>time_t</code>值</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：成功返回日历世家；出错返回-1</span></span><br><span class="line"><span class="function"><span class="keyword">time_t</span> <span class="title">mktime</span><span class="params">(struct tm* tmptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong><code>strftime</code>类似于<code>printf</code>，打印时间值字符串</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：若有空间，返回存入数组的字符数；否则返回0</span></span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strftime</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> maxsize, </span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, </span></span></span><br><span class="line"><span class="function"><span class="params">                <span class="keyword">const</span> struct tm* <span class="keyword">restrict</span> tmptr)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">size_t</span> <span class="title">strftime_l</span><span class="params">(<span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">size_t</span> maxsize, </span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, </span></span></span><br><span class="line"><span class="function"><span class="params">                  <span class="keyword">const</span> struct tm* <span class="keyword">restrict</span> tmptr, <span class="keyword">locale_t</span> locale)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>strftime_l</code>函数可将区域作为参数，除此之外，二者功能一致。<code>strftime</code>通过环境变量<code>TZ</code>指定区域</p>
+</li>
+<li><p><code>tmptr</code>是需要格式化的时间值。格式化的结果存放在长度为<code>maxsize</code>的<code>buf</code>中。若有空间，返回存入数组的字符数，不包括结尾空字符。</p>
+</li>
+<li><p><code>format</code>控制时间值的格式，但是与<code>printf</code>有所不同，具体值如下：</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222224843412.png" alt="image-20210222224843412" style="zoom:65%;">
+
+<p><code>%U</code>为相应日期在该年的周数，包含第一个星期日的周是第一周。<code>%W</code>为相应日期在该年的周数，包含第一个星期一的周是第一周。<code>%V</code>为相应日期在该年的周数，如果包含了1月1日的哪一周，包含了新一年的四天或更多，则该周算第一周，否则算去年的最后一周，在这两种情况下，周一都是每周的第一天。</p>
+</li>
+</ul>
+<p><strong><code>strptime</code>函数是<code>strftime</code>函数反过来，将字符串时间转换为分解时间</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 返回值：指向上次解析字符的下一个字符的指针；否则返回NULL</span></span><br><span class="line"><span class="function"><span class="keyword">char</span>* <span class="title">strptime</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> buf, <span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">restrict</span> format, </span></span></span><br><span class="line"><span class="function"><span class="params">               struct tm* <span class="keyword">restrict</span> tmptr)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p><code>format</code>参数给出了<code>buf</code>缓冲区内的字符串格式，其转换说明的取值如下：</p>
+<img src="/2021/03/05/apue-6-%E7%B3%BB%E7%BB%9F%E6%95%B0%E6%8D%AE%E6%96%87%E4%BB%B6%E5%92%8C%E4%BF%A1%E6%81%AF/image-20210222225805466.png" alt="image-20210222225805466" style="zoom:65%;"></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/unix/"># unix</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/03/05/apue-7-%E8%BF%9B%E7%A8%8B%E7%8E%AF%E5%A2%83/">apue_7_进程环境</a>
+            
+            
+            <a class="next" rel="next" href="/2021/03/05/apue-5-%E6%A0%87%E5%87%86IO%E5%BA%93/">apue_5_标准IO库</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
